@@ -7,6 +7,7 @@ import {
 import { ValidatorForm, TextValidator } from "react-material-ui-form-validator";
 import translate from "../../../translate";
 import { connect } from "react-redux";
+import GoogleLogin from 'react-google-login';
 
 class SignUp extends Component {
   state = {
@@ -23,10 +24,27 @@ class SignUp extends Component {
     });
   };
 
+  signUp(res) {
+    if (res.profileObj !== undefined) {
+      let googleResponse = {
+        name: res.profileObj.name,
+        email: res.profileObj.email,
+        token: res.googleId,
+        image: res.profileObj.imageUrl,
+        providerId: 'Google'
+      };
+    }
+    console.log("iniciar sesion con google....");
+  }
+
   handleFormSubmit = event => {
     console.log("registrando...");
   };
   render() {
+    let responseGoogle = (response) => {
+      console.log(response);
+      this.signUp(response);
+    };
     let { username, email, password, trans } = this.state;
     return (
       <div className="signup flex flex-center w-100 h-100vh">
@@ -100,6 +118,13 @@ class SignUp extends Component {
                       </Button>
                     </div>
                   </ValidatorForm>
+                  <div style={{margin: '10%', cursor: 'pointer'}}>
+                    <GoogleLogin 
+                      clientId="107447816836-mqhfrr3a9aq4nldsr4tjk0624v833fei.apps.googleusercontent.com"
+                      buttonText={trans['SignIn/Up']['google']}
+                      onSuccess={responseGoogle}
+                      onFailure={responseGoogle} ></GoogleLogin>
+                  </div>
                 </div>
               </Grid>
             </Grid>

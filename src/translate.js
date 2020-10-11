@@ -7,6 +7,7 @@ const en = {
     "signUp"         : "Sign up",
     "forgotPassword" : "Forgot password?",
     "username"       : "Username",
+    "google"         : "Login with Google"
   },
   "Validations": {
     "email"    : "Email is not valid",
@@ -23,6 +24,7 @@ const es = {
     "signUp"         : "Registrarse",
     "forgotPassword" : "¿Se te olvidó tu contraseña?",
     "username"       : "Nombre de Usuario",
+    "google"         : "Iniciar sesión con Google"
   },
   "Validations": {
     "email"    : "El correo no es válido",
