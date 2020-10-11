@@ -1,12 +1,11 @@
 import React, { Component } from "react";
 import {
   Card,
-  Checkbox,
-  FormControlLabel,
   Grid,
   Button
 } from "@material-ui/core";
 import { ValidatorForm, TextValidator } from "react-material-ui-form-validator";
+import translate from "../../../translate";
 import { connect } from "react-redux";
 
 class SignUp extends Component {
@@ -14,7 +13,7 @@ class SignUp extends Component {
     username: "",
     email: "",
     password: "",
-    agreement: ""
+    trans: translate
   };
 
   handleChange = event => {
@@ -24,9 +23,11 @@ class SignUp extends Component {
     });
   };
 
-  handleFormSubmit = event => {};
+  handleFormSubmit = event => {
+    console.log("registrando...");
+  };
   render() {
-    let { username, email, password } = this.state;
+    let { username, email, password, trans } = this.state;
     return (
       <div className="signup flex flex-center w-100 h-100vh">
         <div className="p-8">
@@ -46,45 +47,38 @@ class SignUp extends Component {
                     <TextValidator
                       className="mb-24 w-100"
                       variant="outlined"
-                      label="Username"
+                      label={trans['SignIn/Up']['username']}
                       onChange={this.handleChange}
                       type="text"
                       name="username"
                       value={username}
                       validators={["required"]}
-                      errorMessages={["this field is required"]}
+                      errorMessages={trans['Validations']['required']}
                     />
                     <TextValidator
                       className="mb-24 w-100"
                       variant="outlined"
-                      label="Email"
+                      label={trans['SignIn/Up']['email']}
                       onChange={this.handleChange}
                       type="email"
                       name="email"
                       value={email}
                       validators={["required", "isEmail"]}
                       errorMessages={[
-                        "this field is required",
-                        "email is not valid"
+                        trans['Validations']['required'],
+                        trans['Validations']['email']
                       ]}
                     />
                     <TextValidator
                       className="mb-16 w-100"
-                      label="Password"
+                      label={trans['SignIn/Up']['password']}
                       variant="outlined"
                       onChange={this.handleChange}
                       name="password"
                       type="password"
                       value={password}
                       validators={["required"]}
-                      errorMessages={["this field is required"]}
-                    />
-                    <FormControlLabel
-                      className="mb-16"
-                      name="agreement"
-                      onChange={this.handleChange}
-                      control={<Checkbox />}
-                      label="I have read and agree to the terms of service."
+                      errorMessages={trans['Validations']['required']}
                     />
                     <div className="flex flex-middle">
                       <Button
@@ -93,16 +87,16 @@ class SignUp extends Component {
                         color="primary"
                         type="submit"
                       >
-                        Sign up
+                        {trans['SignIn/Up']['signUp']}
                       </Button>
-                      <span className="ml-16 mr-8">or</span>
+                    <span className="ml-16 mr-8">{trans['or']}</span>
                       <Button
                         className="capitalize"
                         onClick={() =>
                           this.props.history.push("/session/signin")
                         }
                       >
-                        Sign in
+                        {trans['SignIn/Up']['signIn']}
                       </Button>
                     </div>
                   </ValidatorForm>
