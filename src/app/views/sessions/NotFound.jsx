@@ -1,9 +1,13 @@
 import React, { Component } from "react";
 import { Button } from "@material-ui/core";
+import translate from '../../../translate';
 
 class NotFound extends Component {
-  state = {};
+  state = {
+    trans: translate
+  };
   render() {
+    let {trans} = this.state;
     return (
       <div className="flex flex-center flex-middle w-100 h-100vh">
         <div className="flex flex-column flex-center flex-middle" style={{ maxWidth: "320px" }}>
@@ -14,7 +18,7 @@ class NotFound extends Component {
             color="primary"
             onClick={() => this.props.history.push("/")}
           >
-            Back to Dashboard
+            {trans['notFound']}
           </Button>
         </div>
       </div>

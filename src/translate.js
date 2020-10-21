@@ -1,5 +1,7 @@
 const en = {
-  "or": "or",
+  "or"       : "or",
+  "notFound" : "Back to Dashboard",
+  "coin"     : "US$",
   "SignIn/Up": {
     "email"          : "Email",
     "password"       : "Password",
@@ -11,11 +13,31 @@ const en = {
   "Validations": {
     "email"    : "Email is not valid",
     "required" : "This field is required"
+  },
+  "Tables": {
+    "openProjects"                   : "Open Projects",
+    "projectsCloseToCompletion"      : "Pojects Close To Completion",
+    "name"                           : "Name",
+    "totalParticipants"              : "Total Participants",
+    "amountCollected"                : "Amount Collected",
+    "accumulatedPercentageCollected" : "Accumulated Percentage Collected",
+    "edit"                           : "Edit",
+    "close"                          : "Close",
+    "donate"                         : "Donate",
+    "rowsPerPage"                    : "Rows per page",
+    "previousPage"                   : "Previous page",
+    "nextPage"                       : "Next page"
+  },
+  "Titles": {
+    "home"                           : "Home",
+    "createProject"                  : "Create Project"
   }
 }
 
 const es = {
-  "or": "o",
+  "or"       : "o",
+  "notFound" : "Volver Al Menú Principal",
+  "coin"     : "ARS$",
   "SignIn/Up": {
     "email"          : "Correo", 
     "password"       : "Contraseña",
@@ -27,6 +49,24 @@ const es = {
   "Validations": {
     "email"    : "El correo no es válido",
     "required" : "Este campo es requerido"
+  },
+  "Tables": {
+    "openProjects"                   : "Proyectos Abiertos",
+    "projectsCloseToCompletion"      : "Proyectos Próximos a Finalizar",
+    "name"                           : "Nombre",
+    "totalParticipants"              : "Total de Participantes",
+    "amountCollected"                : "Monto Recaudado",
+    "accumulatedPercentageCollected" : "Porcentaje Acumulado Recaudado",
+    "edit"                           : "Editar",
+    "close"                          : "Cerrar",
+    "donate"                         : "Donar",
+    "rowsPerPage"                    : "Filas por página",
+    "previousPage"                   : "Página anterior",
+    "nextPage"                       : "Siguiente página"
+  },
+  "Titles": {
+    "home"                           : "Inicio",
+    "createProject"                  : "Crear Proyecto"
   }
 }
 

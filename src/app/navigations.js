@@ -1,8 +1,20 @@
+import trans from '../translate';
+
 export const navigations = [
   {
     name: "Dashboard",
     path: "/dashboard/analytics",
     icon: "dashboard"
+  },
+  {
+    name: trans['Titles']['home'],
+    path: "/home",
+    icon: "home"
+  },
+  {
+    name: trans['Titles']['createProject'],
+    path: "/admin/create-project",
+    icon: "create"
   },
   {
     name: "Forms",
