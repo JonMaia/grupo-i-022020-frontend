@@ -1,23 +1,43 @@
-import React from "react";
-import { TableRow, TableCell, Grid } from "@material-ui/core";
+import React, { useState, useEffect } from "react";
+import { TableRow, TableCell, Grid, CircularProgress, makeStyles } from "@material-ui/core";
 import translate from '../../../translate';
+import { useUserService } from "./UserService.js";
 
-const user =
-  {
-    id:48,
-    name:"Cristian",
-    mail:"cris.esroj@gmail.com",
-    password:"cris123",
-    nickname:"Cris",
-    points:0
-  };
-
+  const useStyles = makeStyles(theme => ({
+    root: {
+      flexGrow: 1
+    },
+    progress: {
+      margin: theme.spacing(2)
+    }
+  }));
 
 const UserInfo = () => {
+  const classes = useStyles();
   const [trans] = React.useState(translate);
 
-  return (
-    <div className="w-100 overflow-auto">
+  const { findUserById } = useUserService();
+  
+  const [user, setUser] = useState([]);
+  const [loadingUser, setLoadingUser] = useState(true);
+
+  useEffect(() => {
+    findUser();
+    return () => {
+    }
+  }, []);
+
+  const findUser = () => {
+    findUserById(48)
+    .then((responsive) => {
+      setLoadingUser(false);
+      setUser(responsive);
+    })
+    .catch((error) => console.log(error))
+  }
+
+  const createInfoUser = () => {
+    return (
       <Grid container spacing={12}>
         <Grid item lg={6} md={6} sm={12} xs={12}>
           <TableRow>
@@ -46,6 +66,12 @@ const UserInfo = () => {
           </TableRow>
         </Grid>
       </Grid>
+    )
+  }
+
+  return (
+    <div className="w-100 overflow-auto">
+      {loadingUser ? <CircularProgress className={classes.progress} /> : createInfoUser()}
     </div>
   );
 };
