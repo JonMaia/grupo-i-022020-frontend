@@ -26,11 +26,16 @@ const en = {
     "donate"                         : "Donate",
     "rowsPerPage"                    : "Rows per page",
     "previousPage"                   : "Previous page",
-    "nextPage"                       : "Next page"
+    "nextPage"                       : "Next page",
+    "mail"                           : "Mail",
+    "password"                       : "Password",
+    "nickname"                       : "Nickname",
+    "points"                         : "Points"
   },
   "Titles": {
     "home"                           : "Home",
-    "createProject"                  : "Create Project"
+    "createProject"                  : "Create Project",
+    "userInfo"                       : "User Info"
   }
 }
 
@@ -62,11 +67,16 @@ const es = {
     "donate"                         : "Donar",
     "rowsPerPage"                    : "Filas por página",
     "previousPage"                   : "Página anterior",
-    "nextPage"                       : "Siguiente página"
+    "nextPage"                       : "Siguiente página",
+    "mail"                           : "Mail",
+    "password"                       : "Contraseña",
+    "nickname"                       : "Apodo",
+    "points"                         : "Puntos"
   },
   "Titles": {
     "home"                           : "Inicio",
-    "createProject"                  : "Crear Proyecto"
+    "createProject"                  : "Crear Proyecto",
+    "userInfo"                       : "Información Usuario"
   }
 }
 
