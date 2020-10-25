@@ -12,6 +12,8 @@ import { PropTypes } from "prop-types";
 import { withRouter } from "react-router-dom";
 import translate from "../../../translate";
 import { loginWithEmailAndPassword } from "../../redux/actions/LoginActions";
+import  AuthService   from "../UserInfo/auth.service.js";
+import history from "history.js";
 
 const styles = theme => ({
   wrapper: {
@@ -29,10 +31,11 @@ const styles = theme => ({
 
 class SignIn extends Component {
   state = {
-    email: "watson@example.com",
-    password: "testpass",
+    mail: "",
+    password: "",
     trans: translate
   };
+
   handleChange = event => {
     event.persist();
     this.setState({
@@ -40,7 +43,14 @@ class SignIn extends Component {
     });
   };
   handleFormSubmit = event => {
-    this.props.loginWithEmailAndPassword({ ...this.state });
+    AuthService.login(this.state)
+    .then(() => {
+      history.push({
+        pathname: "/"
+      
+      });
+    })
+    .catch((error) => console.log(error));
   };
   render() {
     let { email, password, trans } = this.state;
@@ -64,8 +74,8 @@ class SignIn extends Component {
                         label={trans['SignIn/Up']['email']}
                         onChange={this.handleChange}
                         type="email"
-                        name="email"
-                        value={email}
+                        name="mail"
+                        value={this.state.mail}
                         validators={["required", "isEmail"]}
                         errorMessages={[
                           trans['Validations']['required'],

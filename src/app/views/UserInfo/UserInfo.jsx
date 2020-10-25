@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { TableRow, TableCell, Grid, CircularProgress, makeStyles } from "@material-ui/core";
 import translate from '../../../translate';
 import { useUserService } from "./UserService.js";
+import AuthService from "./auth.service.js";
 
   const useStyles = makeStyles(theme => ({
     root: {
@@ -13,11 +14,13 @@ import { useUserService } from "./UserService.js";
   }));
 
 const UserInfo = () => {
+
   const classes = useStyles();
   const [trans] = React.useState(translate);
 
   const { findUserById } = useUserService();
-  
+  const userAuth = AuthService.getCurrentUser();
+
   const [user, setUser] = useState([]);
   const [loadingUser, setLoadingUser] = useState(true);
 
@@ -28,12 +31,12 @@ const UserInfo = () => {
   }, []);
 
   const findUser = () => {
-    findUserById(48)
-    .then((responsive) => {
-      setLoadingUser(false);
-      setUser(responsive);
-    })
-    .catch((error) => console.log(error))
+    findUserById(userAuth.id)
+      .then((responsive) => {
+        setUser(responsive);
+        setLoadingUser(false);  
+      })
+      .catch((error) => console.log(error));    
   }
 
   const createInfoUser = () => {
