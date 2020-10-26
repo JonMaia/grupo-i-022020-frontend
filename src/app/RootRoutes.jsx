@@ -13,6 +13,7 @@ import mapRoutes from "./views/map/MapRoutes";
 
 import homeRoutes from "./views/Home/HomeRoutes.jsx"; 
 import createProjectRoutes from "./views/CreateProject/CreateProjectRoutes.jsx";
+import infoProjectRoutes from "./views/InfoProject/InfoProjectRoutes.jsx"
 
 const redirectRoute = [
   {
@@ -38,6 +39,7 @@ const routes = [
   ...mapRoutes,
   ...homeRoutes,
   ...createProjectRoutes,
+  ...infoProjectRoutes,
   ...redirectRoute,
   ...errorRoute
 ];

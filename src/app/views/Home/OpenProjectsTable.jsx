@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   IconButton,
   Table,
@@ -10,68 +10,16 @@ import {
   TablePagination
 } from "@material-ui/core";
 import translate from '../../../translate';
-
-const projects = [
-  {
-    name: "Avellaneda",
-    totalParticipants: "20",
-    amountCollected: 20000,
-    accumulatedPercentageCollected: 80
-  },
-  {
-    name: "Florencio Varela",
-    totalParticipants: "30",
-    amountCollected: 30000,
-    accumulatedPercentageCollected: 90
-  },
-  {
-    name: "CABA",
-    totalParticipants: "2",
-    amountCollected: 2000,
-    accumulatedPercentageCollected: 20
-  },
-  {
-    name: "Wilde",
-    totalParticipants: "100",
-    amountCollected: 100000,
-    accumulatedPercentageCollected: 100
-  },
-  {
-    name: "Quilmes",
-    totalParticipants: "20",
-    amountCollected: 20000,
-    accumulatedPercentageCollected: 80
-  },
-  {
-    name: "Bernal",
-    totalParticipants: "90",
-    amountCollected: 90000,
-    accumulatedPercentageCollected: 90
-  },
-  {
-    name: "Villa Domínico",
-    totalParticipants: "20",
-    amountCollected: 20000,
-    accumulatedPercentageCollected: 19
-  },
-  {
-    name: "Sarandí",
-    totalParticipants: "20",
-    amountCollected: 20000,
-    accumulatedPercentageCollected: 30
-  },
-  {
-    name: "Alsina",
-    totalParticipants: "23",
-    amountCollected: 23000,
-    accumulatedPercentageCollected: 35
-  }
-];
+import { useHistory } from 'react-router-dom';
+import axios from 'axios';
 
 const OpenProjectsTable = () => {
-  const [rowsPerPage, setRowsPerPage] = React.useState(5);
-  const [page, setPage] = React.useState(0);
-  const [trans] = React.useState(translate);
+  const [rowsPerPage, setRowsPerPage] = useState(5);
+  const [page, setPage] = useState(0);
+  const [trans] = useState(translate);
+  const history = useHistory();
+
+  const [projects, setProjects] = useState([]);
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -81,9 +29,29 @@ const OpenProjectsTable = () => {
     setRowsPerPage(+event.target.value);
   };
 
-  function donate(project) {
-    console.log(project);
-    console.log("editando...");
+  useEffect(() => {
+    async function fetchData() {
+      const response = await axios.get('https://grupo-i-022020-backend.herokuapp.com/crowdfunding/project/open_projects')
+                                .then((res) => {
+                                  console.log(res);
+                                    return res.data;
+                                });
+      // Me llega el id, name, population, province, state. Me falta total de participantes, monto recaudado y porcentaje
+      setProjects(response);
+      console.log(response);
+    }
+    fetchData();
+  }, []);
+
+  function info(projectId, collection, cumulativePercentage) {
+    history.push({
+      pathname: '/user/info-project',
+      state: {
+        id: projectId,
+        collection: collection,
+        cumulativePercentage: cumulativePercentage
+      }
+    });
   };
 
   /* function closeProject(project) {
@@ -96,48 +64,48 @@ const OpenProjectsTable = () => {
       <Table style={{ whiteSpace: "pre" }}>
         <TableHead>
           <TableRow>
-            <TableCell className="px-0">{trans['Tables']['name']}</TableCell>
-            <TableCell className="px-0">{trans['Tables']['totalParticipants']}</TableCell>
-            <TableCell className="px-0">{trans['Tables']['amountCollected']}</TableCell>
-            <TableCell className="px-0">{trans['Tables']['accumulatedPercentageCollected']}</TableCell>
-            <TableCell className="px-0">{trans['Tables']['donate']}</TableCell>
+            <TableCell className="px-0" colSpan={3} align="center">{trans['Tables']['name']}</TableCell>
+            <TableCell className="px-0" colSpan={1} align="center">{trans['Tables']['totalParticipants']}</TableCell>
+            <TableCell className="px-0" colSpan={2} align="center">{trans['Tables']['amountCollected']}</TableCell>
+            <TableCell className="px-0" colSpan={2} align="center">{trans['Tables']['accumulatedPercentageCollected']}</TableCell>
+            <TableCell className="px-0" colSpan={1} align="center">{trans['Tables']['info']}</TableCell>
             {/* <TableCell className="px-0">{trans['Tables']['close']}</TableCell> */}
           </TableRow>
         </TableHead>
         <TableBody>
           {projects
             .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-            .map((project, index) => (
-              <TableRow key={index}>
-                <TableCell className="px-0 capitalize" align="left">
+            .map((project) => (
+              <TableRow key={project.id}>
+                <TableCell className="px-0 capitalize" colSpan={3} align="center">
                   {project.name}
                 </TableCell>
-                <TableCell className="px-0 capitalize" align="left">
-                  {project.totalParticipants}
+                <TableCell className="px-0 capitalize" colSpan={1} align="center">
+                  {project.totalParticipants ? project.totalParticipants : 0}
                 </TableCell>
-                <TableCell className="px-0 capitalize" align="left">
-                  {trans['coin']}{project.amountCollected}
+                <TableCell className="px-0 capitalize" colSpan={2} align="center">
+                  {trans['coin']}{project.collection}
                 </TableCell>
-                <TableCell className="px-0 capitalize">
-                {project.accumulatedPercentageCollected === 100 ? (
+                <TableCell className="px-0 capitalize" colSpan={2} align="center">
+                {project.cumulativePercentage === 100 ? (
                     <small className="border-radius-4 bg-green text-white px-8 py-2 ">
-                      {project.accumulatedPercentageCollected}%
+                      {project.cumulativePercentage}%
                     </small>
                   ) : (
-                    project.accumulatedPercentageCollected < 20 ? (
+                    project.cumulativePercentage < 20 ? (
                       <small className="border-radius-4 bg-error text-white px-8 py-2 ">
-                        {project.accumulatedPercentageCollected}%
+                        {project.cumulativePercentage}%
                       </small>
                     ) : (
                       <small className="border-radius-4 bg-secondary text-white px-8 py-2 ">
-                        {project.accumulatedPercentageCollected}%
+                        {project.cumulativePercentage}%
                       </small>
                     )
                   )}
                 </TableCell>
-                <TableCell className="px-0" colSpan={1}>
-                  <IconButton onClick={() => donate(project)}>
-                    <Icon color="primary">insert_emoticon</Icon>
+                <TableCell className="px-0" colSpan={1} align="center">
+                  <IconButton onClick={() => info(project.id, project.collection, project.cumulativePercentage)}>
+                    <Icon color="primary">info</Icon>
                   </IconButton>
                 </TableCell>
                 {/* <TableCell className="px-0" colSpan={1}>

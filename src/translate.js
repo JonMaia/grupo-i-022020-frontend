@@ -20,17 +20,29 @@ const en = {
     "name"                           : "Name",
     "totalParticipants"              : "Total Participants",
     "amountCollected"                : "Amount Collected",
-    "accumulatedPercentageCollected" : "Accumulated Percentage Collected",
+    "accumulatedPercentageCollected" : "Accumulated Percentage",
     "edit"                           : "Edit",
     "close"                          : "Close",
     "donate"                         : "Donate",
     "rowsPerPage"                    : "Rows per page",
     "previousPage"                   : "Previous page",
-    "nextPage"                       : "Next page"
+    "nextPage"                       : "Next page",
+    "info"                           : "Info",
+    "province"                       : "Province",
+    "population"                     : "Population",
+    "state"                          : "State",
+    "active"                         : "Active",
+    "finished"                       : "Finished"
   },
   "Titles": {
     "home"                           : "Home",
-    "createProject"                  : "Create Project"
+    "createProject"                  : "Create Project",
+    "infoProject"                    : "Project Information",
+    "projectsNearingCompletion"      : "Projects Nearing Completion"
+  },
+  "Dialog": {
+    "amount"                         : "Amount",
+    "comment"                        : "Comment"
   }
 }
 
@@ -56,22 +68,34 @@ const es = {
     "name"                           : "Nombre",
     "totalParticipants"              : "Total de Participantes",
     "amountCollected"                : "Monto Recaudado",
-    "accumulatedPercentageCollected" : "Porcentaje Acumulado Recaudado",
+    "accumulatedPercentageCollected" : "Porcentaje Acumulado",
     "edit"                           : "Editar",
     "close"                          : "Cerrar",
     "donate"                         : "Donar",
     "rowsPerPage"                    : "Filas por página",
     "previousPage"                   : "Página anterior",
-    "nextPage"                       : "Siguiente página"
+    "nextPage"                       : "Siguiente página",
+    "info"                           : "Info.",
+    "province"                       : "Provincia",
+    "population"                     : "Población",
+    "state"                          : "Estado",
+    "active"                         : "Activo",
+    "finished"                       : "Finalizado"
   },
   "Titles": {
     "home"                           : "Inicio",
-    "createProject"                  : "Crear Proyecto"
+    "createProject"                  : "Crear Proyecto",
+    "infoProject"                    : "Información del Proyecto",
+    "projectsNearingCompletion"      : "Proyectos Próximos a Finalizar"
+  },
+  "Dialog": {
+    "amount"                         : "Monto",
+    "comment"                        : "Comentario"
   }
 }
 
 function setTranslate() {
-  return navigator.language.slice(0, 2) == 'en' ? en : es;
+  return navigator.language.slice(0, 2) === 'en' ? en : es;
 }
 
 const translate = setTranslate();
