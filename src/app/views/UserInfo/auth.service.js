@@ -1,7 +1,4 @@
-import axios from "axios";
 import CrowdfundingApi from "./CrowdfundingApi.js";
-
-const API_URL = "https://grupo-i-022020-backend.herokuapp.com/";
 
 class AuthService {
   login(user) {
@@ -19,12 +16,12 @@ class AuthService {
     localStorage.removeItem("user");
   }
 
-  register(username, email, password) {
-    return axios.post(API_URL + "signup", {
-      username,
-      email,
-      password
-    });
+  register(user) {
+    return new Promise((resolve, reject) => {
+      CrowdfundingApi.post('crowdfunding/user/create/', user)
+          .then(({ data: response }) => { resolve(response) })
+          .catch((error) => { reject(error) });
+  });
   }
 
   getCurrentUser() {

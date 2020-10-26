@@ -7,12 +7,15 @@ import {
 import { ValidatorForm, TextValidator } from "react-material-ui-form-validator";
 import translate from "../../../translate";
 import { connect } from "react-redux";
+import  AuthService   from "../UserInfo/auth.service.js";
+import history from "history.js";
 
 class SignUp extends Component {
   state = {
-    username: "",
-    email: "",
+    name: "",
+    mail: "",
     password: "",
+    nickname: "",
     trans: translate
   };
 
@@ -24,10 +27,16 @@ class SignUp extends Component {
   };
 
   handleFormSubmit = event => {
-    console.log("registrando...");
+    AuthService.register(this.state)
+    .then(() => {
+      history.push({
+        pathname: "/session/signin"
+      
+      });
+    })
   };
   render() {
-    let { username, email, password, trans } = this.state;
+    let { name, mail, password, nickname, trans } = this.state;
     return (
       <div className="signup flex flex-center w-100 h-100vh">
         <div className="p-8">
@@ -50,8 +59,19 @@ class SignUp extends Component {
                       label={trans['SignIn/Up']['username']}
                       onChange={this.handleChange}
                       type="text"
-                      name="username"
-                      value={username}
+                      name="name"
+                      value={name}
+                      validators={["required"]}
+                      errorMessages={trans['Validations']['required']}
+                    />
+                    <TextValidator
+                      className="mb-24 w-100"
+                      variant="outlined"
+                      label={trans['SignIn/Up']['nickname']}
+                      onChange={this.handleChange}
+                      type="text"
+                      name="nickname"
+                      value={nickname}
                       validators={["required"]}
                       errorMessages={trans['Validations']['required']}
                     />
@@ -61,8 +81,8 @@ class SignUp extends Component {
                       label={trans['SignIn/Up']['email']}
                       onChange={this.handleChange}
                       type="email"
-                      name="email"
-                      value={email}
+                      name="mail"
+                      value={mail}
                       validators={["required", "isEmail"]}
                       errorMessages={[
                         trans['Validations']['required'],
