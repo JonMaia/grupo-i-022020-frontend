@@ -42,6 +42,7 @@ class SignIn extends Component {
       [event.target.name]: event.target.value
     });
   };
+
   handleFormSubmit = event => {
     AuthService.login(this.state)
     .then(() => {
@@ -52,8 +53,9 @@ class SignIn extends Component {
     })
     .catch((error) => console.log(error));
   };
+
   render() {
-    let { email, password, trans } = this.state;
+    let { mail, password, trans } = this.state;
     let { classes } = this.props;
     return (
         <div className="signup flex flex-center w-100 h-100vh">
@@ -75,7 +77,7 @@ class SignIn extends Component {
                         onChange={this.handleChange}
                         type="email"
                         name="mail"
-                        value={this.state.mail}
+                        value={mail}
                         validators={["required", "isEmail"]}
                         errorMessages={[
                           trans['Validations']['required'],

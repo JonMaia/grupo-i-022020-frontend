@@ -7,7 +7,10 @@ class AuthService {
   login(user) {
     return new Promise((resolve, reject) => {
         CrowdfundingApi.post('crowdfunding/user/login/', user)
-            .then(({ data: respuesta }) => { resolve(respuesta) })
+            .then(({ data: response }) => { 
+              localStorage.setItem("user", JSON.stringify(response)); 
+              return resolve(response);
+            })
             .catch((error) => { reject(error) });
     });
   }
