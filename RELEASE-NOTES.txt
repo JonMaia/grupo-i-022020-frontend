@@ -1,0 +1,24 @@
+====== RELEASE NOTE  ==========
+---------------------------------------------------------------------
+TAG Entrega 2.0
+---------------------------------------------------------------------
+NEW FEATURES:
+Backend:
+* Se implementó el uso de HSQLDB para persistir los datos.
+* Se crearon datos "fakes" para probar la aplicación.
+* Se implementó el Layout de backend según la arquitectura definida.
+* Se integró la api con swagger.
+Frontend:
+* Se implementó i18n-US_ES.
+* Implementación del tier de PResentación como aplicación independiente.
+* Home SPA.
+* Mostrar proyectos abiertos.
+* Realizar donación.
+* Ver perfil de usuario.
+* Registrar usuario.
+
+NOTES:
+* Reducir los valores fakes de los factores y población para no manejar números tan grandes.
+
+KNOWN ISSUES:
+* 
