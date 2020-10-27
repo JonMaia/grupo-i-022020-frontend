@@ -42,8 +42,8 @@ const UserInfo = () => {
   const createInfoUser = () => {
     return (
       <div>
-      <Grid container spacing={10}>
-        <Grid item lg={6} md={6} sm={6} xs={6}>
+      <Grid container>
+        <Grid item lg={6} md={6} sm={10} xs={10}>
           <Table>
             <TableBody>
               <TableRow>
@@ -63,7 +63,7 @@ const UserInfo = () => {
             </TableBody>
           </Table>
         </Grid>
-        <Grid item lg={6} md={4} sm={6} xs={6}>
+        <Grid item lg={6} md={4} sm={10} xs={10}>
           <Table>
             <TableBody>
               <TableRow>
