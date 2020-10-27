@@ -9,6 +9,8 @@ const en = {
     "signUp"         : "Sign up",
     "forgotPassword" : "Forgot password?",
     "username"       : "Username",
+    "nickname"       : "Nickname",
+    "logout"         : "Logout"
   },
   "Validations": {
     "email"    : "Email is not valid",
@@ -32,17 +34,22 @@ const en = {
     "population"                     : "Population",
     "state"                          : "State",
     "active"                         : "Active",
-    "finished"                       : "Finished"
+    "finished"                       : "Finished",
+    "points"                         : "Points"
   },
   "Titles": {
     "home"                           : "Home",
     "createProject"                  : "Create Project",
     "infoProject"                    : "Project Information",
-    "projectsNearingCompletion"      : "Projects Nearing Completion"
+    "projectsNearingCompletion"      : "Projects Nearing Completion",
+    "userInfo"                       : "User Info",
+    "profile"                        : "Profile"
   },
   "Dialog": {
     "amount"                         : "Amount",
-    "comment"                        : "Comment"
+    "comment"                        : "Comment",
+    "title"                          : "Do you want to make a donation?",
+    "cancel"                         : "Cancel"
   }
 }
 
@@ -57,6 +64,8 @@ const es = {
     "signUp"         : "Registrarse",
     "forgotPassword" : "¿Se te olvidó tu contraseña?",
     "username"       : "Nombre de Usuario",
+    "nickname"       : "Apodo",
+    "logout"         : "Cerrar Sesión"
   },
   "Validations": {
     "email"    : "El correo no es válido",
@@ -80,17 +89,22 @@ const es = {
     "population"                     : "Población",
     "state"                          : "Estado",
     "active"                         : "Activo",
-    "finished"                       : "Finalizado"
+    "finished"                       : "Finalizado",
+    "points"                         : "Puntos"
   },
   "Titles": {
     "home"                           : "Inicio",
     "createProject"                  : "Crear Proyecto",
     "infoProject"                    : "Información del Proyecto",
-    "projectsNearingCompletion"      : "Proyectos Próximos a Finalizar"
+    "projectsNearingCompletion"      : "Proyectos Próximos a Finalizar",
+    "userInfo"                       : "Información Usuario",
+    "profile"                        : "Perfil"
   },
   "Dialog": {
     "amount"                         : "Monto",
-    "comment"                        : "Comentario"
+    "comment"                        : "Comentario",
+    "title"                          : "¿Quieres realizar una donación?",
+    "cancel"                         : "Cancelar"
   }
 }
 

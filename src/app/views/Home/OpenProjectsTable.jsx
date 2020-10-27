@@ -43,13 +43,11 @@ const OpenProjectsTable = () => {
     fetchData();
   }, []);
 
-  function info(projectId, collection, cumulativePercentage) {
+  function info(projectId) {
     history.push({
       pathname: '/user/info-project',
       state: {
-        id: projectId,
-        collection: collection,
-        cumulativePercentage: cumulativePercentage
+        id: projectId
       }
     });
   };
@@ -81,7 +79,7 @@ const OpenProjectsTable = () => {
                   {project.name}
                 </TableCell>
                 <TableCell className="px-0 capitalize" colSpan={1} align="center">
-                  {project.totalParticipants ? project.totalParticipants : 0}
+                  {project.cantDonations}
                 </TableCell>
                 <TableCell className="px-0 capitalize" colSpan={2} align="center">
                   {trans['coin']}{project.collection}
@@ -89,16 +87,16 @@ const OpenProjectsTable = () => {
                 <TableCell className="px-0 capitalize" colSpan={2} align="center">
                 {project.cumulativePercentage === 100 ? (
                     <small className="border-radius-4 bg-green text-white px-8 py-2 ">
-                      {project.cumulativePercentage}%
+                      {Math.ceil(project.cumulativePercentage).toFixed(2)}%
                     </small>
                   ) : (
                     project.cumulativePercentage < 20 ? (
                       <small className="border-radius-4 bg-error text-white px-8 py-2 ">
-                        {project.cumulativePercentage}%
+                        {Math.ceil(project.cumulativePercentage).toFixed(2)}%
                       </small>
                     ) : (
                       <small className="border-radius-4 bg-secondary text-white px-8 py-2 ">
-                        {project.cumulativePercentage}%
+                        {Math.ceil(project.cumulativePercentage).toFixed(2)}%
                       </small>
                     )
                   )}

@@ -1,22 +1,22 @@
 import trans from '../translate';
 
 export const navigations = [
-  {
+  /* {
     name: "Dashboard",
     path: "/dashboard/analytics",
     icon: "dashboard"
-  },
+  }, */
   {
     name: trans['Titles']['home'],
     path: "/home",
     icon: "home"
   },
-  {
+  /* {
     name: trans['Titles']['createProject'],
     path: "/admin/create-project",
     icon: "create"
-  },
-  {
+  }, */
+  /* {
     name: "Forms",
     icon: "description",
     children: [
@@ -120,11 +120,11 @@ export const navigations = [
         path: "/session/404"
       }
     ]
-  },
+  }, */
   
   
 
-  {
+  /* {
     name: "UI Kits",
     icon: "favorite",
     badge: { value: "50+", color: "secondary" },
@@ -206,7 +206,7 @@ export const navigations = [
     name: "Map",
     icon: "add_location",
     path: "/map"
-  },
+  }, */
   
   
 ];

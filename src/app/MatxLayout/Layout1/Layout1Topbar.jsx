@@ -17,6 +17,7 @@ import { isMdScreen } from "utils";
 import NotificationBar from "../SharedCompoents/NotificationBar";
 import { Link } from "react-router-dom";
 import ShoppingCart from "../SharedCompoents/ShoppingCart";
+import translate from "../../../translate";
 
 const styles = theme => ({
   root: {
@@ -77,7 +78,7 @@ class Layout1Topbar extends Component {
                 </IconButton>
 
                 <div className="hide-on-mobile">
-                  <IconButton>
+                  {/* <IconButton>
                     <Icon>mail_outline</Icon>
                   </IconButton>
 
@@ -87,15 +88,15 @@ class Layout1Topbar extends Component {
 
                   <IconButton>
                     <Icon>star_outline</Icon>
-                  </IconButton>
+                  </IconButton> */}
                 </div>
               </div>
               <div className="flex flex-middle">
-                <MatxSearchBox />
+                {/* <MatxSearchBox />
 
                 <NotificationBar />
 
-                <ShoppingCart></ShoppingCart>
+                <ShoppingCart></ShoppingCart> */}
 
                 <MatxMenu
                   menuButton={
@@ -107,34 +108,34 @@ class Layout1Topbar extends Component {
                   }
                 >
                   <MenuItem style={{ minWidth: 185 }}>
-                    <Link className="flex flex-middle" to="/">
+                    <Link className="flex flex-middle" to="/home">
                       <Icon> home </Icon>
-                      <span className="pl-16"> Home </span>
+                      <span className="pl-16"> {translate['Titles']['home']} </span>
                     </Link>
                   </MenuItem>
                   <MenuItem style={{ minWidth: 185 }}>
                     <Link
                       className="flex flex-middle"
-                      to="/page-layouts/user-profile"
+                      to="/user/info"
                     >
                       <Icon> person </Icon>
-                      <span className="pl-16"> Profile </span>
+                      <span className="pl-16"> {translate['Titles']['profile']} </span>
                     </Link>
                   </MenuItem>
-                  <MenuItem
+                  {/* <MenuItem
                     className="flex flex-middle"
                     style={{ minWidth: 185 }}
                   >
                     <Icon> settings </Icon>
                     <span className="pl-16"> Settings </span>
-                  </MenuItem>
+                  </MenuItem> */}
                   <MenuItem
                     onClick={this.handleSignOut}
                     className="flex flex-middle"
                     style={{ minWidth: 185 }}
                   >
                     <Icon> power_settings_new </Icon>
-                    <span className="pl-16"> Logout </span>
+                    <span className="pl-16"> {translate['SignIn/Up']['logout']} </span>
                   </MenuItem>
                 </MatxMenu>
               </div>

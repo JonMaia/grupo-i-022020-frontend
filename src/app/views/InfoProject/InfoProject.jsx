@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import {
-  IconButton,
   Table,
   TableHead,
   TableBody,
@@ -19,11 +18,11 @@ import {
   InputAdornment
 } from "@material-ui/core";
 import useMediaQuery from "@material-ui/core/useMediaQuery";
-//import { ValidatorForm, TextValidator } from "react-material-ui-form-validator";
 import translate from '../../../translate';
 import { useHistory } from 'react-router-dom';
 import axios from 'axios';
 import { useTheme } from "@material-ui/core/styles";
+import AuthService from "../UserInfo/auth.service.js";
 
 const donors = [
   {
@@ -57,10 +56,18 @@ const donors = [
 ];
 
 const InfoProjectTable = () => {
-  const [project, setProject]                           = useState({});
-  const [collection, setCollection]                     = useState(0);
-  const [cumulativePercentage, setCumulativePercentage] = useState(0);
+  const [project, setProject]                           = useState({
+    'id': 0, 
+    'name': '', 
+    'locationProvince': '',
+    'locationPopulation': 0,
+    'locationState': false,
+    'collection': 0,
+    'percentage': 0
+  });
   const [open, setOpen]                                 = useState(false);
+  const [collection, setCollection]                     = useState(0);
+  const [percentage, setPercentage]                     = useState(0);
   const [values, setValues]                             = useState({'amount': 0, 'comment': ''});
   const [rowsPerPage, setRowsPerPage]                   = useState(5);
   const [page, setPage]                                 = useState(0);
@@ -68,7 +75,9 @@ const InfoProjectTable = () => {
   const history                                         = useHistory();
   const theme                                           = useTheme();
   const fullScreen                                      = useMediaQuery(theme.breakpoints.down("sm"));
+  const userAuth                                        = AuthService.getCurrentUser();
   
+
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
   };
@@ -79,45 +88,45 @@ const InfoProjectTable = () => {
 
   useEffect(() => {
     const projectId = history.location.state.id; 
-    setCollection(history.location.state.collection);
-    setCumulativePercentage(history.location.state.cumulativePercentage);
     async function fetchData() {
       const response = await axios.get('https://grupo-i-022020-backend.herokuapp.com/crowdfunding/project/'+ projectId)
                                 .then((res) => {
                                     return res.data;
                                 });
-      // Me llega el id, name, population, province, state. Me falta collection y el percentage faltante
-      setProject(response);
+      setProject({
+        'id': response.id,
+        'name': response.name,
+        'locationProvince': response.location.province,
+        'locationPopulation': response.location.population,
+        'locationState': response.location.state,
+        'collection': response.collection,
+        'percentage': response.percentage
+      });
       console.log(response);
     }
     fetchData();
   }, []);
 
   function donate() {
-    console.log("Donate....");
     async function fetchData() {
-      const response1 = await axios
+      const response = await axios
                             .post('https://grupo-i-022020-backend.herokuapp.com/crowdfunding/user/donate',
                             {
                               "amount": values.amount,
                               "comment": values.comment,
-                              "idDonor": 49,
+                              "idDonor": userAuth.id,
                               "idProject": history.location.state.id,
                               "nameProject": project.name
                             })
                                 .then((res) => {
-                                    return res.data;
+                                  return res.data
                                 }).catch((error) => {
                                   console.log(error);
                                 });
-    }
-    async function fetchData() {
-      const response = await axios.get('https://grupo-i-022020-backend.herokuapp.com/crowdfunding/project/'+ history.location.state.id)
-                                .then((res) => {
-                                    return res.data;
-                                });
-      setProject(response);
-      console.log(response);
+      setProject({...project, 
+        'collection': response.project.collection,
+        'percentage': response.project.percentage
+      });
     }
     fetchData();
     handleClose();
@@ -166,21 +175,21 @@ const InfoProjectTable = () => {
                 </small>)}
             </TableCell>
             <TableCell className="px-0 capitalize" colSpan={2} align="center">
-                  {trans['coin']}{collection}
+                  {trans['coin']}{project.collection}
             </TableCell>
             <TableCell className="px-0 capitalize" colSpan={2} align="center">
-              {cumulativePercentage === 100 ? (
+              {project.percentage === 100 ? (
                 <small className="border-radius-4 bg-green text-white px-8 py-2 ">
-                  {cumulativePercentage}%
+                  {Math.ceil(project.percentage).toFixed(2)}%
                 </small>
               ) : (
-                cumulativePercentage < 20 ? (
+                project.percentage < 20 ? (
                   <small className="border-radius-4 bg-error text-white px-8 py-2 ">
-                    {cumulativePercentage}%
+                    {Math.ceil(project.percentage).toFixed(2)}%
                   </small>
                 ) : (
                   <small className="border-radius-4 bg-secondary text-white px-8 py-2 ">
-                    {cumulativePercentage}%
+                    {Math.ceil(project.percentage).toFixed(2)}%
                   </small>
                 )
               )}
@@ -195,11 +204,11 @@ const InfoProjectTable = () => {
                       aria-labelledby="responsive-dialog-title"
                     >
                       <DialogTitle id="responsive-dialog-title">
-                        {"Use Google's location service?"}
+                        {trans['Dialog']['title']}
                       </DialogTitle>
                       <DialogContent>
                         <FormControl variant="filled">
-                          <InputLabel htmlFor="filled-adornment-amount">Amount</InputLabel>
+                          <InputLabel htmlFor="filled-adornment-amount">{trans['Dialog']['amount']}</InputLabel>
                           <FilledInput
                             id="filled-adornment-amount"
                             value={values.amount}
@@ -208,7 +217,7 @@ const InfoProjectTable = () => {
                           />
                         </FormControl>
                         <FormControl variant="filled">
-                          <InputLabel htmlFor="filled-adornment-amount">Comment</InputLabel>
+                          <InputLabel htmlFor="filled-adornment-amount">{trans['Dialog']['comment']}</InputLabel>
                           <FilledInput
                             id="filled-adornment-amount"
                             value={values.comment}
@@ -218,7 +227,7 @@ const InfoProjectTable = () => {
                       </DialogContent>
                       <DialogActions>
                         <Button onClick={handleClose} color="primary">
-                          Disagree
+                          {trans['Dialog']['cancel']}
                         </Button>
                         <Button onClick={() => donate()} color="primary" autoFocus>
                           {trans['Tables']['donate']}
@@ -230,7 +239,7 @@ const InfoProjectTable = () => {
           </TableRow>
         </TableBody>
       </Table>
-      <div className="py-12" />
+      {/* <div className="py-12" />
       <Table style={{ whiteSpace: "pre" }}>
         <TableHead>
           <TableRow>
@@ -272,7 +281,7 @@ const InfoProjectTable = () => {
         onChangePage={handleChangePage}
         labelRowsPerPage={trans['Tables']['rowsPerPage']}
         onChangeRowsPerPage={handleChangeRowsPerPage}
-      />
+      /> */}
     </div> 
   );
 };

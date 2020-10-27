@@ -22,6 +22,8 @@ import Sidenav from "../SharedCompoents/Sidenav";
 import Brand from "../SharedCompoents/Brand";
 import SidenavTheme from "../MatxTheme/SidenavTheme";
 import { isMdScreen } from "utils";
+import AuthService from "../../views/UserInfo/auth.service.js";
+import translate from "../../../translate";
 
 const styles = theme => ({});
 
@@ -87,6 +89,12 @@ class Layout1Sidenav extends Component {
     this.props.logoutUser();
   };
 
+  userInfo = () => {
+    this.props.history.push({
+      pathname: '/user/info'
+    });
+  };
+
   renderLogoSwitch = () => (
     // Open Brand component file to replace logo and text
     <Brand>
@@ -109,10 +117,10 @@ class Layout1Sidenav extends Component {
         <div className="ml-8">
           <span className="username">
             {/* <Icon>lock</Icon> */}
-            {user.displayName}
+            {AuthService.getCurrentUser().nickname}
           </span>
           <div className="user__menu">
-            <MatxMenu
+            {/* <MatxMenu
               menuButton={
                 <Tooltip title="Settings">
                   <IconButtonWhite
@@ -133,14 +141,18 @@ class Layout1Sidenav extends Component {
                 <Icon> settings </Icon>
                 <span className="pl-16"> Account Setting </span>
               </MenuItem>
-            </MatxMenu>
+            </MatxMenu> */}
 
-            <Tooltip title="Profile">
-              <IconButtonWhite aria-label="Delete" className="" size="small">
+            <Tooltip title={translate['Titles']['profile']}>
+              <IconButtonWhite aria-label="Delete" 
+                               className="" 
+                               size="small"
+                               onClick={this.userInfo}
+                               >
                 <IconSmall>person</IconSmall>
               </IconButtonWhite>
             </Tooltip>
-            <Tooltip title="Sign out">
+            <Tooltip title={translate['SignIn/Up']['logout']}>
               <IconButtonWhite
                 aria-label="Delete"
                 className=""

@@ -14,12 +14,13 @@ import mapRoutes from "./views/map/MapRoutes";
 import homeRoutes from "./views/Home/HomeRoutes.jsx"; 
 import createProjectRoutes from "./views/CreateProject/CreateProjectRoutes.jsx";
 import infoProjectRoutes from "./views/InfoProject/InfoProjectRoutes.jsx"
+import userInfoRoutes from "./views/UserInfo/UserInfoRoutes.jsx";
 
 const redirectRoute = [
   {
     path: "/",
     exact: true,
-    component: () => <Redirect to="/home" />
+    component: () => <Redirect to="/session/signup" />
   }
 ];
 
@@ -31,15 +32,16 @@ const errorRoute = [
 
 const routes = [
   ...sessionRoutes,
-  ...dashboardRoutes,
-  ...materialRoutes,
-  ...utilitiesRoutes,
-  ...dragAndDropRoute,
-  ...formsRoutes,
-  ...mapRoutes,
+  //...dashboardRoutes,
+  //...materialRoutes,
+  //...utilitiesRoutes,
+  //...dragAndDropRoute,
+  //...formsRoutes,
+  //...mapRoutes,
   ...homeRoutes,
   ...createProjectRoutes,
   ...infoProjectRoutes,
+  ...userInfoRoutes,
   ...redirectRoute,
   ...errorRoute
 ];
