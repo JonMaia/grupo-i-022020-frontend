@@ -36,7 +36,6 @@ const UserInfo = () => {
       .then((responsive) => {
         setUser(responsive);
         setLoadingUser(false);
-        console.log(responsive);
       })
       .catch((error) => console.log(error));    
   }
