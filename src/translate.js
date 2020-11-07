@@ -35,7 +35,10 @@ const en = {
     "state"                          : "State",
     "active"                         : "Active",
     "finished"                       : "Finished",
-    "points"                         : "Points"
+    "points"                         : "Points",
+    "amount"                         : "Amount",
+    "date"                           : "Date",
+    "projectName"                    : "Project Name"
   },
   "Titles": {
     "home"                           : "Home",
@@ -43,6 +46,7 @@ const en = {
     "infoProject"                    : "Project Information",
     "projectsNearingCompletion"      : "Projects Nearing Completion",
     "userInfo"                       : "User Info",
+    "donationsInfo"                  : "Donations Info",
     "profile"                        : "Profile"
   },
   "Dialog": {
@@ -90,7 +94,10 @@ const es = {
     "state"                          : "Estado",
     "active"                         : "Activo",
     "finished"                       : "Finalizado",
-    "points"                         : "Puntos"
+    "points"                         : "Puntos",
+    "amount"                         : "Monto",
+    "date"                           : "Fecha",
+    "projectName"                    : "Nombre del Proyecto"
   },
   "Titles": {
     "home"                           : "Inicio",
@@ -98,6 +105,7 @@ const es = {
     "infoProject"                    : "Información del Proyecto",
     "projectsNearingCompletion"      : "Proyectos Próximos a Finalizar",
     "userInfo"                       : "Información Usuario",
+    "donationsInfo"                  : "Información de Donaciones",
     "profile"                        : "Perfil"
   },
   "Dialog": {
