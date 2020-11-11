@@ -6,13 +6,14 @@ import {
   withStyles,
   CircularProgress
 } from "@material-ui/core";
+//import Alert from '@material-ui/lab';
 import { TextValidator, ValidatorForm } from "react-material-ui-form-validator";
 import { connect } from "react-redux";
 import { PropTypes } from "prop-types";
 import { withRouter } from "react-router-dom";
 import translate from "../../../translate";
 import { loginWithEmailAndPassword } from "../../redux/actions/LoginActions";
-import  AuthService   from "../UserInfo/auth.service.js";
+import  AuthService   from "../api-services/AuthService.js";
 import history from "history.js";
 
 const styles = theme => ({
@@ -51,7 +52,13 @@ class SignIn extends Component {
       
       });
     })
-    .catch((error) => console.log(error));
+    .catch((error) => {
+
+      console.log("quehayeneste error");
+      console.log(error);
+      console.log(error.response.status); 
+      console.log(error.response.data);
+    });
   };
 
   render() {

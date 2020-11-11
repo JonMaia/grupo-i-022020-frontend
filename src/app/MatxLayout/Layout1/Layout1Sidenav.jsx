@@ -22,7 +22,7 @@ import Sidenav from "../SharedCompoents/Sidenav";
 import Brand from "../SharedCompoents/Brand";
 import SidenavTheme from "../MatxTheme/SidenavTheme";
 import { isMdScreen } from "utils";
-import AuthService from "../../views/UserInfo/auth.service.js";
+import AuthService from "../../views/api-services/AuthService.js";
 import translate from "../../../translate";
 
 const styles = theme => ({});

@@ -1,10 +1,10 @@
-import CrowdfundingApi from "./CrowdfundingApi.js";
+import CrowdfundingApi from "../CrowdfundingApi.js";
 
 export const useUserService = () => {
 
     const findUserById = (id) => {
         return new Promise((resolve, reject) => {
-            CrowdfundingApi.get(`crowdfunding/user/info/${id}`)
+            CrowdfundingApi.get(`crowdfunding/user/info/2`)
                 .then(({ data: respuesta }) => { resolve(respuesta) })
                 .catch((error) => { reject(error) });
         });

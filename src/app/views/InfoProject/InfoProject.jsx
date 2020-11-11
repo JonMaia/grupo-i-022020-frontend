@@ -22,7 +22,7 @@ import translate from '../../../translate';
 import { useHistory } from 'react-router-dom';
 import axios from 'axios';
 import { useTheme } from "@material-ui/core/styles";
-import AuthService from "../UserInfo/auth.service.js";
+import AuthService from "../api-services/AuthService.js";
 
 const donors = [
   {

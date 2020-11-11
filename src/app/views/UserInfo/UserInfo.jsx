@@ -2,8 +2,8 @@ import React, { useState, useEffect } from "react";
 import { SimpleCard } from "matx";
 import { TableRow, TableCell, TableHead, Grid, CircularProgress, makeStyles, TableBody, Table } from "@material-ui/core";
 import translate from '../../../translate';
-import { useUserService } from "./UserService.js";
-import AuthService from "./auth.service.js";
+import { useUserService } from "../api-services/service/UserService.js";
+import AuthService from "../api-services/AuthService.js";
 
   const useStyles = makeStyles(theme => ({
     root: {

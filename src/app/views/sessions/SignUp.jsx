@@ -7,7 +7,7 @@ import {
 import { ValidatorForm, TextValidator } from "react-material-ui-form-validator";
 import translate from "../../../translate";
 import { connect } from "react-redux";
-import  AuthService   from "../UserInfo/auth.service.js";
+import  AuthService   from "../api-services/AuthService.js";
 import history from "history.js";
 
 class SignUp extends Component {
