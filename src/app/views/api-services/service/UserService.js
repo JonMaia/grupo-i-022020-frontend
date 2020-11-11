@@ -4,7 +4,7 @@ export const useUserService = () => {
 
     const findUserById = (id) => {
         return new Promise((resolve, reject) => {
-            CrowdfundingApi.get(`crowdfunding/user/info/2`)
+            CrowdfundingApi.get(`crowdfunding/user/info/${id}`)
                 .then(({ data: respuesta }) => { resolve(respuesta) })
                 .catch((error) => { reject(error) });
         });
