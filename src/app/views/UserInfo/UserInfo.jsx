@@ -32,7 +32,7 @@ const UserInfo = () => {
   }, []);
 
   const findUser = () => {
-    findUserById(userAuth.id)
+    findUserById(userAuth.id, userAuth.token)
       .then((responsive) => {
         setUser(responsive);
         setLoadingUser(false);

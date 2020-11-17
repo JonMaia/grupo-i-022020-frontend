@@ -3,12 +3,16 @@ import CrowdfundingApi from "./CrowdfundingApi.js";
 class AuthService {
   login(user) {
     return new Promise((resolve, reject) => {
-        CrowdfundingApi.post('crowdfunding/user/login/', user)
-            .then(({ data: response }) => { 
-              localStorage.setItem("user", JSON.stringify(response)); 
-              return resolve(response);
-            })
-            .catch((error) => { reject(error) });
+      CrowdfundingApi.post('crowdfunding/user/login', user, {
+        headers: {
+          'Accept':'application/json',
+          'Content-Type':'application/json'}
+        })
+        .then(({ data: response }) => { 
+          localStorage.setItem("user", JSON.stringify(response)); 
+          return resolve(response);
+        })
+        .catch((error) => { reject(error) });
     });
   }
 
@@ -19,8 +23,8 @@ class AuthService {
   register(user) {
     return new Promise((resolve, reject) => {
       CrowdfundingApi.post('crowdfunding/user/create/', user)
-          .then(({ data: response }) => { resolve(response) })
-          .catch((error) => { reject(error) });
+        .then(({ data: response }) => { resolve(response) })
+        .catch((error) => { reject(error) });
   });
   }
 
