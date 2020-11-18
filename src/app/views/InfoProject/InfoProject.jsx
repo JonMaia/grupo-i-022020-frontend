@@ -23,6 +23,8 @@ import { useHistory } from 'react-router-dom';
 import axios from 'axios';
 import { useTheme } from "@material-ui/core/styles";
 import AuthService from "../api-services/AuthService.js";
+import { useUserService } from "../api-services/service/UserService.js"
+import { useProjectService } from "../api-services/service/ProjectService.js"
 
 const donors = [
   {
@@ -56,15 +58,7 @@ const donors = [
 ];
 
 const InfoProjectTable = () => {
-  const [project, setProject]                           = useState({
-    'id': 0, 
-    'name': '', 
-    'locationProvince': '',
-    'locationPopulation': 0,
-    'locationState': false,
-    'collection': 0,
-    'percentage': 0
-  });
+  const [projects, setProjects]                           = useState([]);
   const [open, setOpen]                                 = useState(false);
   const [collection, setCollection]                     = useState(0);
   const [percentage, setPercentage]                     = useState(0);
@@ -76,7 +70,8 @@ const InfoProjectTable = () => {
   const theme                                           = useTheme();
   const fullScreen                                      = useMediaQuery(theme.breakpoints.down("sm"));
   const userAuth                                        = AuthService.getCurrentUser();
-  
+  const { new_donate }                                  = useUserService();
+  const { open_projects }                                     = useProjectService();
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -87,48 +82,34 @@ const InfoProjectTable = () => {
   };
 
   useEffect(() => {
-    const projectId = history.location.state.id; 
-    async function fetchData() {
-      const response = await axios.get('https://grupo-i-022020-backend.herokuapp.com/crowdfunding/project/'+ projectId)
-                                .then((res) => {
-                                    return res.data;
-                                });
-      setProject({
-        'id': response.id,
-        'name': response.name,
-        'locationProvince': response.location.province,
-        'locationPopulation': response.location.population,
-        'locationState': response.location.state,
-        'collection': response.collection,
-        'percentage': response.percentage
-      });
-      console.log(response);
-    }
-    fetchData();
+    const projectId = history.location.state.id;
+    allProjects();
   }, []);
 
+  function allProjects() {
+    open_projects()
+      .then((response) => {
+        setProjects(response);
+      })
+      .catch((error) => console.log(error));
+  }
+
   function donate() {
-    async function fetchData() {
-      const response = await axios
-                            .post('https://grupo-i-022020-backend.herokuapp.com/crowdfunding/user/donate',
-                            {
-                              "amount": values.amount,
-                              "comment": values.comment,
-                              "idDonor": userAuth.id,
-                              "idProject": history.location.state.id,
-                              "nameProject": project.name
-                            })
-                                .then((res) => {
-                                  return res.data
-                                }).catch((error) => {
-                                  console.log(error);
-                                });
-      setProject({...project, 
-        'collection': response.project.collection,
-        'percentage': response.project.percentage
-      });
+    const donation = {
+      "amount": values.amount,
+      "comment": values.comment,
+      "idDonor": userAuth.id,
+      "idProject": history.location.state.id,
     }
-    fetchData();
+    
+    new_donate(donation, userAuth.token)
+      .then((response) => {
+        setProjects({...projects, 
+          'collection': response.project.collection,
+          'percentage': response.project.percentage
+        });
+      })
+      .catch((error) => console.log(error));
     handleClose();
   };
 
@@ -155,44 +136,45 @@ const InfoProjectTable = () => {
           </TableRow>
         </TableHead>
         <TableBody>
-          <TableRow key={project.id}>
-            <TableCell className="px-0 capitalize" colSpan={2} align="center">
-              {project.name}
-            </TableCell>
-            <TableCell className="px-0 capitalize" colSpan={2} align="center">
-              {project.locationProvince}
-            </TableCell>
-            <TableCell className="px-0 capitalize" colSpan={2} align="center">
-              {project.locationPopulation}
-            </TableCell>
-            <TableCell className="px-0 capitalize" colSpan={1} align="center">
-              {project.locationState ? (
-                <small className="border-radius-4 bg-green text-white px-8 py-2 ">
-                  {trans['Tables']['active']}
-                </small>) : (
-                <small className="border-radius-4 bg-error text-white px-8 py-2 ">
-                  {trans['Tables']['finished']}
-                </small>)}
-            </TableCell>
-            <TableCell className="px-0 capitalize" colSpan={2} align="center">
-                  {trans['coin']}{project.collection}
-            </TableCell>
-            <TableCell className="px-0 capitalize" colSpan={2} align="center">
-              {project.percentage === 100 ? (
-                <small className="border-radius-4 bg-green text-white px-8 py-2 ">
-                  {Math.ceil(project.percentage).toFixed(2)}%
-                </small>
-              ) : (
-                project.percentage < 20 ? (
+          {projects.map((project) => (
+            <TableRow key={project.id}>
+              <TableCell className="px-0 capitalize" colSpan={2} align="center">
+                {project.name}
+              </TableCell>
+              <TableCell className="px-0 capitalize" colSpan={2} align="center">
+                {project.locationProvince}
+              </TableCell>
+              <TableCell className="px-0 capitalize" colSpan={2} align="center">
+                {project.locationPopulation}
+              </TableCell>
+              <TableCell className="px-0 capitalize" colSpan={1} align="center">
+                {project.locationState ? (
+                  <small className="border-radius-4 bg-green text-white px-8 py-2 ">
+                    {trans['Tables']['active']}
+                  </small>) : (
                   <small className="border-radius-4 bg-error text-white px-8 py-2 ">
+                    {trans['Tables']['finished']}
+                  </small>)}
+              </TableCell>
+              <TableCell className="px-0 capitalize" colSpan={2} align="center">
+                    {trans['coin']}{project.collection}
+              </TableCell>
+              <TableCell className="px-0 capitalize" colSpan={2} align="center">
+                {project.percentage === 100 ? (
+                  <small className="border-radius-4 bg-green text-white px-8 py-2 ">
                     {Math.ceil(project.percentage).toFixed(2)}%
                   </small>
                 ) : (
-                  <small className="border-radius-4 bg-secondary text-white px-8 py-2 ">
-                    {Math.ceil(project.percentage).toFixed(2)}%
-                  </small>
-                )
-              )}
+                  project.percentage < 20 ? (
+                    <small className="border-radius-4 bg-error text-white px-8 py-2 ">
+                      {Math.ceil(project.percentage).toFixed(2)}%
+                    </small>
+                  ) : (
+                    <small className="border-radius-4 bg-secondary text-white px-8 py-2 ">
+                      {Math.ceil(project.percentage).toFixed(2)}%
+                    </small>
+                  )
+                )}
             </TableCell>
             <TableCell className="px-0" colSpan={1} align="center">
               <Button hidden onClick={handleClose}>
@@ -237,6 +219,7 @@ const InfoProjectTable = () => {
                   
             </TableCell>
           </TableRow>
+          ))}
         </TableBody>
       </Table>
       {/* <div className="py-12" />

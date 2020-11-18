@@ -1,10 +1,10 @@
 import CrowdfundingApi from "../CrowdfundingApi.js";
 
-export const useUserService = () => {
+export const useAdminService = () => {
 
-    const findUserById = (id, token) => {
+    const createProject = (project, token) => {
         return new Promise((resolve, reject) => {
-            CrowdfundingApi.get(`crowdfunding/user/info/${id}`, {
+            CrowdfundingApi.get(`backoffice/create_project`, project, {
                 headers: {
                     'Authorization': token
                 }
@@ -14,17 +14,9 @@ export const useUserService = () => {
         });
     }
     
-    const login = (user) => {
+    const finishCollection = (user) => {
         return new Promise((resolve, reject) => {
-            CrowdfundingApi.post('crowdfunding/user/login/', user)
-                .then(({ data: respuesta }) => { resolve(respuesta) })
-                .catch((error) => { reject(error) });
-        });
-    }
-
-    const new_donate = (donation, token) => {
-        return new Promise((resolve, reject) => {
-            CrowdfundingApi.post('crowdfunding/user/donate/', donation, {
+            CrowdfundingApi.put('backoffice/finish_collection', project, {
                 headers: {
                     'Authorization': token
                 }
@@ -34,5 +26,5 @@ export const useUserService = () => {
         });
     }
 
-    return { findUserById, login, new_donate }
+    return { createProject, finishCollection }
 }
