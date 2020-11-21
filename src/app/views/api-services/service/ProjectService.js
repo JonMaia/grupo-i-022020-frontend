@@ -6,7 +6,8 @@ export const useProjectService = () => {
         return new Promise((resolve, reject) => {
             CrowdfundingApi.get(`/crowdfunding/project/open_projects` , {
                 headers: {
-                    'Authorization': token
+                    'Accept':'application/json',
+                    'Content-Type':'application/json'
                 }
             })
                 .then(({ data: respuesta }) => { resolve(respuesta) })

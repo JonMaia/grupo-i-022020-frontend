@@ -12,7 +12,6 @@ import {
 import translate from '../../../translate';
 import { useHistory } from 'react-router-dom';
 import { useProjectService } from "../api-services/service/ProjectService.js" 
-import AuthService from "../api-services/AuthService.js";
 
 const OpenProjectsTable = () => {
   const [rowsPerPage, setRowsPerPage] = useState(5);
@@ -22,7 +21,6 @@ const OpenProjectsTable = () => {
   const { open_projects } = useProjectService();
 
   const [projects, setProjects] = useState([]);
-  const userAuth = AuthService.getCurrentUser();
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -37,7 +35,7 @@ const OpenProjectsTable = () => {
   }, []);
 
   function allProjects() {
-    open_projects(userAuth.token)
+    open_projects()
       .then((response) => {
         setProjects(response);
       })
