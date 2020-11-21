@@ -4,7 +4,11 @@ export const useProjectService = () => {
 
     const open_projects = () => {
         return new Promise((resolve, reject) => {
-            CrowdfundingApi.get(`/crowdfunding/project/open_projects`)
+            CrowdfundingApi.get(`/crowdfunding/project/open_projects` , {
+                headers: {
+                    'Authorization': token
+                }
+            })
                 .then(({ data: respuesta }) => { resolve(respuesta) })
                 .catch((error) => { reject(error) });
         });

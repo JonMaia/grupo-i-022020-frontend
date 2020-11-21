@@ -11,15 +11,18 @@ import {
 } from "@material-ui/core";
 import translate from '../../../translate';
 import { useHistory } from 'react-router-dom';
-import axios from 'axios';
+import { useProjectService } from "../api-services/service/ProjectService.js" 
+import AuthService from "../api-services/AuthService.js";
 
 const OpenProjectsTable = () => {
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [page, setPage] = useState(0);
   const [trans] = useState(translate);
   const history = useHistory();
+  const { open_projects } = useProjectService();
 
   const [projects, setProjects] = useState([]);
+  const userAuth = AuthService.getCurrentUser();
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -30,18 +33,16 @@ const OpenProjectsTable = () => {
   };
 
   useEffect(() => {
-    async function fetchData() {
-      const response = await axios.get('https://grupo-i-022020-backend.herokuapp.com/crowdfunding/project/open_projects')
-                                .then((res) => {
-                                  console.log(res);
-                                    return res.data;
-                                });
-      // Me llega el id, name, population, province, state. Me falta total de participantes, monto recaudado y porcentaje
-      setProjects(response);
-      console.log(response);
-    }
-    fetchData();
+    allProjects();
   }, []);
+
+  function allProjects() {
+    open_projects(userAuth.token)
+      .then((response) => {
+        setProjects(response);
+      })
+      .catch((error) => console.log(error));
+  }
 
   function info(projectId) {
     history.push({
