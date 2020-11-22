@@ -23,13 +23,14 @@ export const useUserService = () => {
     }
 
     const new_donate = (donation, token) => {
+        console.log("entro");
         return new Promise((resolve, reject) => {
             CrowdfundingApi.post('crowdfunding/user/donate/', donation, {
                 headers: {
                     'Authorization': token
                 }
             })
-                .then(({ data: respuesta }) => { resolve(respuesta) })
+                .then((response) => { resolve(response) })
                 .catch((error) => { reject(error) });
         });
     }

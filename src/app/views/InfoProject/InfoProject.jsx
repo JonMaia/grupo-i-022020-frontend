@@ -11,67 +11,45 @@ import {
   DialogTitle,
   DialogContent,
   DialogActions,
+  DialogContentText,
   Button,
   FormControl,
   FilledInput,
   InputLabel,
-  InputAdornment
+  InputAdornment,
+  IconButton,
+  Slide
 } from "@material-ui/core";
 import useMediaQuery from "@material-ui/core/useMediaQuery";
 import translate from '../../../translate';
 import { useHistory } from 'react-router-dom';
-import axios from 'axios';
 import { useTheme } from "@material-ui/core/styles";
 import AuthService from "../api-services/AuthService.js";
-import { useUserService } from "../api-services/service/UserService.js"
-import { useProjectService } from "../api-services/service/ProjectService.js"
+import { useUserService } from "../api-services/service/UserService.js";
+import { useProjectService } from "../api-services/service/ProjectService.js";
+import { useAdminService } from "../api-services/service/AdminService.js";
 
-const donors = [
-  {
-    nickname: "Donor1",
-    donation: 1000,
-  },
-  {
-    nickname: "El Donador",
-    donation: 4000,
-  },
-  {
-    nickname: "The Donor",
-    donation: 2000,
-  },
-  {
-    nickname: "Bill Gates",
-    donation: 100,
-  },
-  {
-    nickname: "Ion Hazzikostas",
-    donation: 9000,
-  },
-  {
-    nickname: "Satoshi Tajiri",
-    donation: 9000,
-  },
-  {
-    nickname: "Shigeru Mishamoto",
-    donation: 9000,
-  }
-];
+const Transition = React.forwardRef(function Transition(props, ref) {
+  return <Slide direction="up" ref={ref} {...props} />;
+});
 
 const InfoProjectTable = () => {
-  const [projects, setProjects]                           = useState([]);
-  const [open, setOpen]                                 = useState(false);
-  const [collection, setCollection]                     = useState(0);
-  const [percentage, setPercentage]                     = useState(0);
-  const [values, setValues]                             = useState({'amount': 0, 'comment': ''});
-  const [rowsPerPage, setRowsPerPage]                   = useState(5);
-  const [page, setPage]                                 = useState(0);
-  const [trans]                                         = useState(translate);
-  const history                                         = useHistory();
-  const theme                                           = useTheme();
-  const fullScreen                                      = useMediaQuery(theme.breakpoints.down("sm"));
-  const userAuth                                        = AuthService.getCurrentUser();
-  const { new_donate }                                  = useUserService();
-  const { open_projects }                                     = useProjectService();
+  const [project, setProject]         = useState({});
+  const [location, setLocation]       = useState({});
+  const [open, setOpen]               = useState(false);
+  const [values, setValues]           = useState({'amount': 0, 'comment': ''});
+  const [rowsPerPage, setRowsPerPage] = useState(5);
+  const [page, setPage]               = useState(0);
+  const [trans]                       = useState(translate);
+  const history                       = useHistory();
+  const theme                         = useTheme();
+  const fullScreen                    = useMediaQuery(theme.breakpoints.down("sm"));
+  const userAuth                      = AuthService.getCurrentUser();
+  const { new_donate }                = useUserService();
+  const { get_project }               = useProjectService();
+  const { finishCollection }          = useAdminService();
+  const [close, setClose]             = useState(false);
+  const [msg, setMsg]                 = useState("");
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -83,16 +61,17 @@ const InfoProjectTable = () => {
 
   useEffect(() => {
     const projectId = history.location.state.id;
-    allProjects();
-  }, []);
-
-  function allProjects() {
-    open_projects()
+    console.log(userAuth.token);
+    get_project(projectId, userAuth.token)
       .then((response) => {
-        setProjects(response);
+        console.log(response);
+        setProject(response);
+        setLocation(response.location);
       })
-      .catch((error) => console.log(error));
-  }
+      .catch((error) => {
+        console.log(error);
+      });
+  }, []);
 
   function donate() {
     const donation = {
@@ -104,10 +83,8 @@ const InfoProjectTable = () => {
     
     new_donate(donation, userAuth.token)
       .then((response) => {
-        setProjects({...projects, 
-          'collection': response.project.collection,
-          'percentage': response.project.percentage
-        });
+        setProject(response.data.project);
+        setLocation(response.data.project.location);
       })
       .catch((error) => console.log(error));
     handleClose();
@@ -117,12 +94,54 @@ const InfoProjectTable = () => {
     open ? setOpen(false) : setOpen(true);
   }
 
+  const handleCloseProject = () => {
+    close ? setClose(false) : setClose(true);
+  }
+
+  const handleAccept = () => {
+    console.log(project);
+    finishCollection(project, userAuth.token)
+      .then((response) => {
+        console.log(response);
+      })
+      .catch((error) => console.log(error));
+  }
+
   const handleChange = (prop) => (event) => {
     setValues({...values, [prop]: event.target.value});
   }
 
+  function closeProject() {
+    setClose(true);
+  };
+
   return (
     <div className="w-100 overflow-auto">
+      <Dialog
+        open={close}
+        TransitionComponent={Transition}
+        keepMounted
+        onClose={handleCloseProject}
+        aria-labelledby="alert-dialog-slide-title"
+        aria-describedby="alert-dialog-slide-description"
+      >
+        <DialogTitle id="alert-dialog-slide-title">
+          {trans['Titles']['closeProject']}
+        </DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-slide-description">
+            {trans['Dialog']['reallyClose']}
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleCloseProject} color="primary">
+            {trans['Dialog']['cancel']}
+          </Button>
+          <Button onClick={handleAccept} color="primary">
+            {trans['Dialog']['accept']}
+          </Button>
+        </DialogActions>
+      </Dialog>
       <Table style={{ whiteSpace: "pre" }}>
         <TableHead>
           <TableRow>
@@ -132,23 +151,26 @@ const InfoProjectTable = () => {
             <TableCell className="px-0" colSpan={1} align="center">{trans['Tables']['state']}</TableCell>
             <TableCell className="px-0" colSpan={2} align="center">{trans['Tables']['amountCollected']}</TableCell>
             <TableCell className="px-0" colSpan={2} align="center">{trans['Tables']['accumulatedPercentageCollected']}</TableCell>
-            <TableCell className="px-0" colSpan={1} align="center">{trans['Tables']['donate']}</TableCell>
+            { userAuth.id == 1 ? 
+              <TableCell className="px-0" colSpan={1} align="center">{trans['Tables']['close']}</TableCell> 
+              : 
+              <TableCell className="px-0" colSpan={1} align="center">{trans['Tables']['donate']}</TableCell>
+            }  
           </TableRow>
         </TableHead>
         <TableBody>
-          {projects.map((project) => (
             <TableRow key={project.id}>
               <TableCell className="px-0 capitalize" colSpan={2} align="center">
                 {project.name}
               </TableCell>
               <TableCell className="px-0 capitalize" colSpan={2} align="center">
-                {project.locationProvince}
+                {location.province}
               </TableCell>
               <TableCell className="px-0 capitalize" colSpan={2} align="center">
-                {project.locationPopulation}
+                {location.population}
               </TableCell>
               <TableCell className="px-0 capitalize" colSpan={1} align="center">
-                {project.locationState ? (
+                {location.state ? (
                   <small className="border-radius-4 bg-green text-white px-8 py-2 ">
                     {trans['Tables']['active']}
                   </small>) : (
@@ -176,50 +198,63 @@ const InfoProjectTable = () => {
                   )
                 )}
             </TableCell>
-            <TableCell className="px-0" colSpan={1} align="center">
-              <Button hidden onClick={handleClose}>
-                <Icon color="primary">payment</Icon>
-              </Button>
-                    <Dialog
-                      fullScreen={fullScreen}
-                      open={open}
-                      aria-labelledby="responsive-dialog-title"
-                    >
-                      <DialogTitle id="responsive-dialog-title">
-                        {trans['Dialog']['title']}
-                      </DialogTitle>
-                      <DialogContent>
-                        <FormControl variant="filled">
-                          <InputLabel htmlFor="filled-adornment-amount">{trans['Dialog']['amount']}</InputLabel>
-                          <FilledInput
-                            id="filled-adornment-amount"
-                            value={values.amount}
-                            onChange={handleChange('amount')}
-                            startAdornment={<InputAdornment position="start">$</InputAdornment>}
-                          />
-                        </FormControl>
-                        <FormControl variant="filled">
-                          <InputLabel htmlFor="filled-adornment-amount">{trans['Dialog']['comment']}</InputLabel>
-                          <FilledInput
-                            id="filled-adornment-amount"
-                            value={values.comment}
-                            onChange={handleChange('comment')}
-                          />
-                        </FormControl>
-                      </DialogContent>
-                      <DialogActions>
-                        <Button onClick={handleClose} color="primary">
-                          {trans['Dialog']['cancel']}
-                        </Button>
-                        <Button onClick={() => donate()} color="primary" autoFocus>
-                          {trans['Tables']['donate']}
-                        </Button>
-                      </DialogActions>
-                    </Dialog>
-                  
-            </TableCell>
+            {userAuth.id == 1 ?
+              <TableCell className="px-0" colSpan={1} align="center">
+                <IconButton onClick={() => closeProject()}>
+                  {project.percentage === 100 ? (
+                      <Icon className="icon-table-green">check_circle</Icon>
+                    ) : (
+                      project.percentage < 20 ? (
+                          <Icon color="error">check_circle</Icon>
+                        ) : (
+                          <Icon color="secondary">check_circle</Icon>
+                        )
+                  )}
+                </IconButton>
+              </TableCell> : 
+              <TableCell className="px-0" colSpan={1} align="center">
+                <Button hidden onClick={handleClose}>
+                  <Icon color="primary">payment</Icon>
+                </Button>
+                  <Dialog
+                    fullScreen={fullScreen}
+                    open={open}
+                    aria-labelledby="responsive-dialog-title"
+                  >
+                    <DialogTitle id="responsive-dialog-title">
+                      {trans['Dialog']['title']}
+                    </DialogTitle>
+                    <DialogContent>
+                      <FormControl variant="filled">
+                        <InputLabel htmlFor="filled-adornment-amount">{trans['Dialog']['amount']}</InputLabel>
+                        <FilledInput
+                          id="filled-adornment-amount"
+                          value={values.amount}
+                          onChange={handleChange('amount')}
+                          startAdornment={<InputAdornment position="start">$</InputAdornment>}
+                        />
+                      </FormControl>
+                      <FormControl variant="filled">
+                        <InputLabel htmlFor="filled-adornment-amount">{trans['Dialog']['comment']}</InputLabel>
+                        <FilledInput
+                          id="filled-adornment-amount"
+                          value={values.comment}
+                          onChange={handleChange('comment')}
+                        />
+                      </FormControl>
+                    </DialogContent>
+                    <DialogActions>
+                      <Button onClick={handleClose} color="primary">
+                        {trans['Dialog']['cancel']}
+                      </Button>
+                      <Button onClick={() => donate()} color="primary" autoFocus>
+                        {trans['Tables']['donate']}
+                      </Button>
+                    </DialogActions>
+                  </Dialog>
+                </TableCell>
+            }
           </TableRow>
-          ))}
         </TableBody>
       </Table>
       {/* <div className="py-12" />

@@ -16,7 +16,8 @@ class SignUp extends Component {
     mail: "",
     password: "",
     nickname: "",
-    trans: translate
+    error: false,
+    msg: ""
   };
 
   handleChange = event => {
@@ -33,10 +34,13 @@ class SignUp extends Component {
         pathname: "/session/signin"
       
       });
-    })
+    }).catch((error) => {
+      console.log(error.response.data);
+      this.setState({error: true, msg: error.response.data});
+    });
   };
   render() {
-    let { name, mail, password, nickname, trans } = this.state;
+    let { name, mail, password, nickname, error, msg } = this.state;
     return (
       <div className="signup flex flex-center w-100 h-100vh">
         <div className="p-8">
@@ -56,49 +60,49 @@ class SignUp extends Component {
                     <TextValidator
                       className="mb-24 w-100"
                       variant="outlined"
-                      label={trans['SignIn/Up']['username']}
+                      label={translate['SignIn/Up']['username']}
                       onChange={this.handleChange}
                       type="text"
                       name="name"
                       value={name}
                       validators={["required"]}
-                      errorMessages={trans['Validations']['required']}
+                      errorMessages={translate['Validations']['required']}
                     />
                     <TextValidator
                       className="mb-24 w-100"
                       variant="outlined"
-                      label={trans['SignIn/Up']['nickname']}
+                      label={translate['SignIn/Up']['nickname']}
                       onChange={this.handleChange}
                       type="text"
                       name="nickname"
                       value={nickname}
                       validators={["required"]}
-                      errorMessages={trans['Validations']['required']}
+                      errorMessages={translate['Validations']['required']}
                     />
                     <TextValidator
                       className="mb-24 w-100"
                       variant="outlined"
-                      label={trans['SignIn/Up']['email']}
+                      label={translate['SignIn/Up']['email']}
                       onChange={this.handleChange}
                       type="email"
                       name="mail"
                       value={mail}
                       validators={["required", "isEmail"]}
                       errorMessages={[
-                        trans['Validations']['required'],
-                        trans['Validations']['email']
+                        translate['Validations']['required'],
+                        translate['Validations']['email']
                       ]}
                     />
                     <TextValidator
                       className="mb-16 w-100"
-                      label={trans['SignIn/Up']['password']}
+                      label={translate['SignIn/Up']['password']}
                       variant="outlined"
                       onChange={this.handleChange}
                       name="password"
                       type="password"
                       value={password}
                       validators={["required"]}
-                      errorMessages={trans['Validations']['required']}
+                      errorMessages={translate['Validations']['required']}
                     />
                     <div className="flex flex-middle">
                       <Button
@@ -107,16 +111,16 @@ class SignUp extends Component {
                         color="primary"
                         type="submit"
                       >
-                        {trans['SignIn/Up']['signUp']}
+                        {translate['SignIn/Up']['signUp']}
                       </Button>
-                    <span className="ml-16 mr-8">{trans['or']}</span>
+                    <span className="ml-16 mr-8">{translate['or']}</span>
                       <Button
                         className="capitalize"
                         onClick={() =>
                           this.props.history.push("/session/signin")
                         }
                       >
-                        {trans['SignIn/Up']['signIn']}
+                        {translate['SignIn/Up']['signIn']}
                       </Button>
                     </div>
                   </ValidatorForm>

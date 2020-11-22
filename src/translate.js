@@ -10,11 +10,13 @@ const en = {
     "forgotPassword" : "Forgot password?",
     "username"       : "Username",
     "nickname"       : "Nickname",
-    "logout"         : "Logout"
+    "logout"         : "Logout",
+    "isAdmin"        : "Login as administrator"
   },
   "Validations": {
-    "email"    : "Email is not valid",
-    "required" : "This field is required"
+    "email"      : "Email is not valid",
+    "required"   : "This field is required",
+    "minLength4" : "(Min length 4)"
   },
   "Tables": {
     "openProjects"                   : "Open Projects",
@@ -47,13 +49,25 @@ const en = {
     "projectsNearingCompletion"      : "Projects Nearing Completion",
     "userInfo"                       : "User Info",
     "donationsInfo"                  : "Donations Info",
-    "profile"                        : "Profile"
+    "profile"                        : "Profile",
+    "projectName"                    : "Solidarity Solidario Argentina Connected",
+    "closeProject"                   : "Close Project",
+    "endDate"                        : "End Date",
+    "minPercentage"                  : "Min Percentage",
+    "factor"                         : "Factor",
+    "locations"                      : "Locations"
   },
   "Dialog": {
     "amount"                         : "Amount",
     "comment"                        : "Comment",
     "title"                          : "Do you want to make a donation?",
-    "cancel"                         : "Cancel"
+    "cancel"                         : "Cancel",
+    "accept"                         : "Accept",
+    "reallyClose"                    : "Are you sure you want to close the project?"
+  },
+  "Error": {
+    "incorrectData"                  : "Incorrect Data",
+    "Incorrect mail or password"     : "Incorrect email or password"
   }
 }
 
@@ -69,11 +83,13 @@ const es = {
     "forgotPassword" : "¿Se te olvidó tu contraseña?",
     "username"       : "Nombre de Usuario",
     "nickname"       : "Apodo",
-    "logout"         : "Cerrar Sesión"
+    "logout"         : "Cerrar Sesión",
+    "isAdmin"        : "Iniciar como administrado"
   },
   "Validations": {
-    "email"    : "El correo no es válido",
-    "required" : "Este campo es requerido"
+    "email"      : "El correo no es válido",
+    "required"   : "Este campo es requerido",
+    "minLength4" : "(Mínimo 4 caracteres)"
   },
   "Tables": {
     "openProjects"                   : "Proyectos Abiertos",
@@ -106,13 +122,25 @@ const es = {
     "projectsNearingCompletion"      : "Proyectos Próximos a Finalizar",
     "userInfo"                       : "Información Usuario",
     "donationsInfo"                  : "Información de Donaciones",
-    "profile"                        : "Perfil"
+    "profile"                        : "Perfil",
+    "projectName"                    : "Crowdfunding Solidario Argentina Conectada",
+    "closeProject"                   : "Cerrar Proyecto",
+    "endDate"                        : "Fecha de Cierre",
+    "minPercentage"                  : "Porcentaje Mínimo",
+    "factor"                         : "Factor",
+    "locations"                      : "Localidades"
   },
   "Dialog": {
     "amount"                         : "Monto",
     "comment"                        : "Comentario",
     "title"                          : "¿Quieres realizar una donación?",
-    "cancel"                         : "Cancelar"
+    "cancel"                         : "Cancelar",
+    "accept"                         : "Aceptar",
+    "reallyClose"                    : "¿Seguro quieres cerrar el proyecto?"
+  },
+  "Error": {
+    "incorrectData"                  : "Datos Incorrectos",
+    "Incorrect mail or password"     : "Email o contraseña incorrectos"
   }
 }
 

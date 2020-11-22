@@ -32,12 +32,12 @@ const errorRoute = [
 
 const routes = [
   ...sessionRoutes,
-  //...dashboardRoutes,
-  //...materialRoutes,
-  //...utilitiesRoutes,
-  //...dragAndDropRoute,
-  //...formsRoutes,
-  //...mapRoutes,
+  ...dashboardRoutes,
+  ...materialRoutes,
+  ...utilitiesRoutes,
+  ...dragAndDropRoute,
+  ...formsRoutes,
+  ...mapRoutes,
   ...homeRoutes,
   ...createProjectRoutes,
   ...infoProjectRoutes,

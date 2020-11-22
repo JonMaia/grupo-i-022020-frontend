@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import Select from "react-select";
 import { ValidatorForm, TextValidator } from "react-material-ui-form-validator";
 import {
   Button,
@@ -13,19 +14,39 @@ import {
 } from "@material-ui/pickers";
 import "date-fns";
 import DateFnsUtils from "@date-io/date-fns";
+import translate from "../../../translate.js";
+import { useLocationService } from "../api-services/service/LocationService";
+import { useAdminService } from "../api-services/service/AdminService";
+import AuthService from "../api-services/AuthService.js";
 
 class CreateProject extends Component {
   state = {
     name: "",
     minPercentage: "",
-    active: false,
+    active: true,
     endDate: new Date(),
     location: "",
     factor: "",
-    errorMessageEndDate: false
+    errorMessageEndDate: false,
+    locations: [],
+    single: null,
   };
 
+  handleChangeSingle(value) {
+    console.log(value);
+    this.setState({single: value});
+  }
+
   componentDidMount() {
+    useLocationService().findAll()
+    .then((response) => {
+      this.setState({locations: response.data.map(location => ({
+        value: location,
+        label: location.name
+      }))});
+      console.log(this.state.locations);
+    })
+    .catch((error) => console.log(error));
     // custom rule will have name 'isPasswordMatch'
     ValidatorForm.addValidationRule("isPasswordMatch", value => {
       if (value !== this.state.password) {
@@ -54,6 +75,27 @@ class CreateProject extends Component {
   }
 
   handleSubmit = event => {
+    const project = {
+      idAdmin: AuthService.getCurrentUser().id.toString(),
+      active: this.state.active,
+      endDate: this.state.endDate.toLocaleDateString(),
+      factor: this.state.factor,
+      locationName: this.state.single.value.name,
+      locationProvince: this.state.single.value.province,
+      locationPopulation: this.state.single.value.population,
+      locationState: this.state.single.value.state,
+      minPercentage: this.state.minPercentage,
+      name: this.state.name
+    }
+    console.log(project);
+    console.log(AuthService.getCurrentUser());
+    useAdminService().createProject(project)
+    .then((response) => { 
+      console.log(response);
+    }).catch((error) => {
+      console.log(error);
+    });
+    console.log(this.state);
     console.log("submitted");
     console.log(event);
   };
@@ -77,9 +119,10 @@ class CreateProject extends Component {
       minPercentage,
       active,
       endDate,
-      location,
       factor,
-      errorMessageEndDate
+      errorMessageEndDate,
+      single,
+      locations
     } = this.state;
     return (
       <div>
@@ -90,9 +133,20 @@ class CreateProject extends Component {
         >
           <Grid container spacing={6}>
             <Grid item lg={6} md={6} sm={12} xs={12}>
+              <Select
+                className="mb-16 w-100"
+                inputId="react-select-single"
+                options={locations}
+                value={single}
+                placeholder={translate['Titles']['locations']}
+                defaultValue={locations[0]}
+                defaultInputValue={locations[0]}
+                onChange={(value) => this.handleChangeSingle(value)}
+              />
+
               <TextValidator
                 className="mb-16 w-100"
-                label="Name (Min length 4)"
+                label={translate['Tables']['projectName']+translate['Validations']['minLength4']}
                 onChange={this.handleChange}
                 type="text"
                 name="name"
@@ -110,7 +164,7 @@ class CreateProject extends Component {
                   className="mb-16 w-100"
                   margin="none"
                   id="mui-pickers-date"
-                  label="End Date"
+                  label={translate['Titles']['endDate']}
                   inputVariant="standard"
                   type="text"
                   autoOk={false}
@@ -126,9 +180,22 @@ class CreateProject extends Component {
                   <label></label>
                 }
                 </div>
+            </Grid>
+
+            <Grid item lg={6} md={6} sm={12} xs={12}>
               <TextValidator
-                className="mb-32 w-100"
-                label="Min Percentage"
+                className="mb-16 w-100"
+                label={translate['Titles']['factor']}
+                onChange={this.handleChange}
+                type="number"
+                name="factor"
+                value={factor}
+                validators={["validateFactor"]}
+                errorMessages={["accepted values between 0 and 100000"]}
+              />
+              <TextValidator
+                className="mb-16 w-100"
+                label={translate['Titles']['minPercentage']}
                 onChange={this.handleChange}
                 type="number"
                 name="minPercentage"
@@ -141,30 +208,18 @@ class CreateProject extends Component {
                 ]}
                 errorMessages={["this field is required", "accepted values between 1 and 100"]}
               />
-            </Grid>
-
-            <Grid item lg={6} md={6} sm={12} xs={12}>
-              <TextValidator
-                className="mb-32 w-100"
-                label="Factor"
-                onChange={this.handleChange}
-                type="number"
-                name="factor"
-                value={factor}
-                validators={["validateFactor"]}
-                errorMessages={["accepted values between 0 and 100000"]}
-              />
               <FormControlLabel
                 control={<Checkbox />}
-                label="Active"
+                label={translate['Tables']['active']}
                 value={active}
+                defaultChecked={true}
                 name="active"
               />
             </Grid>
           </Grid>
           <Button color="primary" variant="contained" type="submit">
             <Icon>send</Icon>
-            <span className="pl-8 capitalize">Send</span>
+              <span className="pl-8 capitalize">{translate['Titles']['createProject']}</span>
           </Button>
         </ValidatorForm>
       </div>

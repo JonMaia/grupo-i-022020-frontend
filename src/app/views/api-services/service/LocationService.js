@@ -1,18 +1,23 @@
 import CrowdfundingApi from "../CrowdfundingApi.js";
+import AuthUser from "../AuthService"
 
 export const useLocationService = () => {
 
     const findAll = () => {
         return new Promise((resolve, reject) => {
-            CrowdfundingApi.get(`/crowdfunding/location/findAll`)
-                .then(({ data: respuesta }) => { resolve(respuesta) })
+            CrowdfundingApi.get(`/crowdfunding/location/findAll`, {
+                headers: {
+                    'Authorization': AuthUser.getCurrentUser().token
+                }
+            })
+                .then((response) => { resolve(response) })
                 .catch((error) => { reject(error) });
         });
     }
 
     const findLocationById = (id, token) => {
         return new Promise((resolve, reject) => {
-            CrowdfundingApi.get(`/crowdfunding/location/${id}`, , {
+            CrowdfundingApi.get(`/crowdfunding/location/${id}`, {
                 headers: {
                     'Authorization': token
                 }
@@ -22,5 +27,5 @@ export const useLocationService = () => {
         });
     }
 
-    return { open_projects, findLocationById}
+    return { findAll, findLocationById}
 }

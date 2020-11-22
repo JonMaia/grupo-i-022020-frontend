@@ -11,7 +11,8 @@ import {
 } from "@material-ui/core";
 import translate from '../../../translate';
 import { useHistory } from 'react-router-dom';
-import { useProjectService } from "../api-services/service/ProjectService.js" 
+import { useProjectService } from "../api-services/service/ProjectService.js"
+import AuthUser from "../api-services/AuthService.js";
 
 const OpenProjectsTable = () => {
   const [rowsPerPage, setRowsPerPage] = useState(5);
@@ -19,6 +20,7 @@ const OpenProjectsTable = () => {
   const [trans] = useState(translate);
   const history = useHistory();
   const { open_projects } = useProjectService();
+  const userAuth = AuthUser.getCurrentUser();
 
   const [projects, setProjects] = useState([]);
 
@@ -51,11 +53,6 @@ const OpenProjectsTable = () => {
     });
   };
 
-  /* function closeProject(project) {
-    console.log(project);
-    console.log("cerrando...");
-  }; */
-
   return (
     <div className="w-100 overflow-auto">
       <Table style={{ whiteSpace: "pre" }}>
@@ -65,8 +62,7 @@ const OpenProjectsTable = () => {
             <TableCell className="px-0" colSpan={1} align="center">{trans['Tables']['totalParticipants']}</TableCell>
             <TableCell className="px-0" colSpan={2} align="center">{trans['Tables']['amountCollected']}</TableCell>
             <TableCell className="px-0" colSpan={2} align="center">{trans['Tables']['accumulatedPercentageCollected']}</TableCell>
-            <TableCell className="px-0" colSpan={1} align="center">{trans['Tables']['info']}</TableCell>
-            {/* <TableCell className="px-0">{trans['Tables']['close']}</TableCell> */}
+            <TableCell className="px-0" colSpan={1} align="center">{trans['Tables']['info']}</TableCell>            
           </TableRow>
         </TableHead>
         <TableBody>
@@ -105,19 +101,6 @@ const OpenProjectsTable = () => {
                     <Icon color="primary">info</Icon>
                   </IconButton>
                 </TableCell>
-                {/* <TableCell className="px-0" colSpan={1}>
-                  <IconButton onClick={() => closeProject(project)}>
-                  {project.accumulatedPercentageCollected === 100 ? (
-                    <Icon className="icon-table-green">check_circle</Icon>
-                  ) : (
-                    project.accumulatedPercentageCollected < 20 ? (
-                      <Icon color="error">check_circle</Icon>
-                    ) : (
-                      <Icon color="secondary">check_circle</Icon>
-                    )
-                  )}
-                  </IconButton>
-                </TableCell> */}
               </TableRow>
             ))}
         </TableBody>
