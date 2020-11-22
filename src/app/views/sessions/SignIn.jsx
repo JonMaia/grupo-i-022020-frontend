@@ -13,8 +13,10 @@ import { withRouter } from "react-router-dom";
 import translate from "../../../translate";
 import { loginWithEmailAndPassword } from "../../redux/actions/LoginActions";
 import  AuthService   from "../api-services/AuthService.js";
+import  {useAdminService}   from "../api-services/service/AdminService.js";
 import history from "history.js";
 
+const { createProject } = useAdminService();
 
 const styles = theme => ({
   wrapper: {
@@ -58,7 +60,7 @@ class SignIn extends Component {
         "locationPopulation": 451653,
         "locationState": true
       }
-      AuthService.create_project(project, res.token)
+      createProject(project, res.token)
       .then((res) => {
         console.log("se creo el proyecto");
         console.log(res);

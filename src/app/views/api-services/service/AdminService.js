@@ -4,7 +4,7 @@ export const useAdminService = () => {
 
     const createProject = (project, token) => {
         return new Promise((resolve, reject) => {
-            CrowdfundingApi.get(`backoffice/create_project`, project, {
+            CrowdfundingApi.post(`backoffice/create_project`, project, {
                 headers: {
                     'Authorization': token
                 }
@@ -14,7 +14,7 @@ export const useAdminService = () => {
         });
     }
     
-    const finishCollection = (user) => {
+    const finishCollection = (project, token) => {
         return new Promise((resolve, reject) => {
             CrowdfundingApi.put('backoffice/finish_collection', project, {
                 headers: {
