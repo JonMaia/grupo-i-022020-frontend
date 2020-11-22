@@ -7,7 +7,6 @@ import {
   CircularProgress,
   Checkbox
 } from "@material-ui/core";
-//import Alert from '@material-ui/lab';
 import { TextValidator, ValidatorForm } from "react-material-ui-form-validator";
 import { connect } from "react-redux";
 import { PropTypes } from "prop-types";
@@ -157,14 +156,6 @@ class SignIn extends Component {
                           }}
                         />
                       </div>
-                      {/* <Button
-                        className="text-primary"
-                        onClick={() =>
-                          this.props.history.push("/session/forgot-password")
-                        }
-                      >
-                        {translate['SignIn/Up']['forgotPassword']}
-                      </Button> */}
                     </ValidatorForm>
                   </div>
                 </Grid>
