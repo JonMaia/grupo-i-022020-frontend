@@ -6,7 +6,6 @@ import {
   withStyles,
   CircularProgress
 } from "@material-ui/core";
-//import Alert from '@material-ui/lab';
 import { TextValidator, ValidatorForm } from "react-material-ui-form-validator";
 import { connect } from "react-redux";
 import { PropTypes } from "prop-types";
@@ -15,6 +14,7 @@ import translate from "../../../translate";
 import { loginWithEmailAndPassword } from "../../redux/actions/LoginActions";
 import  AuthService   from "../api-services/AuthService.js";
 import history from "history.js";
+
 
 const styles = theme => ({
   wrapper: {
@@ -45,20 +45,36 @@ class SignIn extends Component {
   };
 
   handleFormSubmit = event => {
-    AuthService.login(this.state)
-    .then(() => {
-      history.push({
+    AuthService.loginAdmin(this.state)
+    .then((res) => {
+      const project = {
+        "idAdmin": "1",
+        "name": "project prueba 2",
+        "minPercentage": "50.2",
+        "endDate": "2020-05-25",
+        "factor": "6",
+        "locationName": "san francisco solano",
+        "locationProvince": "Buenoas Aires",
+        "locationPopulation": 451653,
+        "locationState": true
+      }
+      AuthService.create_project(project, res.token)
+      .then((res) => {
+        console.log("se creo el proyecto");
+        console.log(res);
+      })
+/*      history.push({
         pathname: "/home"
       
-      });
+      });*/
     })
     .catch((error) => {
 
       console.log("quehayeneste error");
-      console.log(error);
+      console.log(error);/*
       console.log(error.response.status); 
-      console.log(error.response.data);
-    });
+      console.log(error.response.data);*/
+    })
   };
 
   render() {

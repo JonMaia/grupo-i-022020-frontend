@@ -19,11 +19,7 @@ class AuthService {
 
   login(user) {
     return new Promise((resolve, reject) => {
-      CrowdfundingApi.post('crowdfunding/user/login', user, {
-        headers: {
-          'Accept':'application/json',
-          'Content-Type':'application/json'}
-        })
+      CrowdfundingApi.post('crowdfunding/user/login', user)
         .then(({ data: response }) => { 
           localStorage.setItem("user", JSON.stringify(response)); 
           return resolve(response);
@@ -50,6 +46,18 @@ class AuthService {
 
   getCurrentUser() {
     return JSON.parse(localStorage.getItem('user'));;
+  }
+
+  create_project(project, token) {
+    return new Promise((resolve, reject) => {
+      CrowdfundingApi.post(`/backoffice/create_project`, project, {
+        headers: {
+          'Authorization': token
+        }
+      })
+          .then(({ data: respuesta }) => { resolve(respuesta) })
+          .catch((error) => { reject(error) });
+    });
   }
 }
 
