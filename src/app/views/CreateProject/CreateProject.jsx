@@ -19,6 +19,8 @@ import { useLocationService } from "../api-services/service/LocationService";
 import { useAdminService } from "../api-services/service/AdminService";
 import AuthService from "../api-services/AuthService.js";
 
+const { createProject } = useAdminService();
+
 class CreateProject extends Component {
   state = {
     name: "",
@@ -76,28 +78,27 @@ class CreateProject extends Component {
 
   handleSubmit = event => {
     const project = {
-      idAdmin: AuthService.getCurrentUser().id.toString(),
-      active: this.state.active,
-      endDate: this.state.endDate.toLocaleDateString(),
+      idAdmin: AuthService.getCurrentUser().id,
+      //active: this.state.active,
+      endDate: this.state.endDate,
       factor: this.state.factor,
+      idLocation: this.state.single.value.id,
       locationName: this.state.single.value.name,
-      locationProvince: this.state.single.value.province,
-      locationPopulation: this.state.single.value.population,
-      locationState: this.state.single.value.state,
+      //locationProvince: this.state.single.value.province,
+      //locationPopulation: this.state.single.value.population,
+      //locationState: this.state.active,//this.state.single.value.state,
       minPercentage: this.state.minPercentage,
       name: this.state.name
     }
-    console.log(project);
-    console.log(AuthService.getCurrentUser());
-    useAdminService().createProject(project)
+
+    createProject(project)
     .then((response) => { 
+      console.log("se creo");
       console.log(response);
     }).catch((error) => {
       console.log(error);
+      console.log(error.response.data);
     });
-    console.log(this.state);
-    console.log("submitted");
-    console.log(event);
   };
 
   handleChange = event => {

@@ -1,6 +1,6 @@
 import React from 'react';
 import OpenProjectsTable from './OpenProjectsTable';
-import ProjectsNearingCompletion from './ProjectsNearingCompletion';
+//import ProjectsNearingCompletion from './ProjectsNearingCompletion';
 import { Breadcrumb, SimpleCard } from "matx";
 import translate from '../../../translate';
 
