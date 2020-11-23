@@ -32,24 +32,9 @@ class AuthService {
     });
   }
 
-  loginAdmin(user) {
-    return new Promise((resolve, reject) => {
-      CrowdfundingApi.post('backoffice/login', user, {
-        headers: {
-          'Accept':'application/json',
-          'Content-Type':'application/json'}
-        })
-        .then(({ data: response }) => { 
-          localStorage.setItem("user", JSON.stringify(response)); 
-          return resolve(response);
-        })
-        .catch((error) => { reject(error) });
-    });
-  }
-
-  logout() {
-    localStorage.removeItem("user");
-  }
+  // logout() {
+  //   localStorage.removeItem("user");
+  // }
 
   register(user) {
     return new Promise((resolve, reject) => {

@@ -63,7 +63,9 @@ const en = {
     "title"                          : "Do you want to make a donation?",
     "cancel"                         : "Cancel",
     "accept"                         : "Accept",
-    "reallyClose"                    : "Are you sure you want to close the project?"
+    "reallyClose"                    : "Are you sure you want to close the project?",
+    "create"                         : "Has been succesfully created",
+    "close"                          : "Closed Successfully"
   },
   "Error": {
     "incorrectData"                  : "Incorrect Data",
@@ -136,7 +138,9 @@ const es = {
     "title"                          : "¿Quieres realizar una donación?",
     "cancel"                         : "Cancelar",
     "accept"                         : "Aceptar",
-    "reallyClose"                    : "¿Seguro quieres cerrar el proyecto?"
+    "reallyClose"                    : "¿Seguro quieres cerrar el proyecto?",
+    "create"                         : "Se ha creado satisfactoriamente",
+    "close"                          : "Se cerró satisfactoriamente"
   },
   "Error": {
     "incorrectData"                  : "Datos Incorrectos",
@@ -145,6 +149,7 @@ const es = {
 }
 
 function setTranslate() {
+  localStorage.setItem("i18n", navigator.language.slice(0, 2) === 'en' ? "en" : "es");
   return navigator.language.slice(0, 2) === 'en' ? en : es;
 }
 

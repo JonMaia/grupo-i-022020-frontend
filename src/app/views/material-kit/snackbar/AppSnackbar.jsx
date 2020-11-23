@@ -1,7 +1,7 @@
 import React from "react";
 import { Breadcrumb, SimpleCard } from "matx";
 import SimpleSnackbar from "./SimpleSnackbar";
-import CustomizedSnackbars from "./CustomizedSnackbar";
+import {CustomizedSnackbars} from "./CustomizedSnackbar";
 import PositionedSnackbar from "./PositionedSnackbar";
 import LongTextSnackbar from "./LongLengthSnackbar";
 import ConsecutiveSnackbar from "./ConsecutiveSnackbar";

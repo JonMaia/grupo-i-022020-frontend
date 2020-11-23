@@ -117,7 +117,7 @@ class Layout1Sidenav extends Component {
         <div className="ml-8">
           <span className="username">
             {/* <Icon>lock</Icon> */}
-            {AuthService.getCurrentUser().id == 1 ? AuthService.getCurrentUser().name : AuthService.getCurrentUser().nickname}
+            {AuthService.getCurrentUser() == null ? "" : AuthService.getCurrentUser().id == 1 ? AuthService.getCurrentUser().name : AuthService.getCurrentUser().nickname}
           </span>
           <div className="user__menu">
             {/* <MatxMenu

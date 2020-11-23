@@ -20,9 +20,9 @@ const AppHome = () => {
         <OpenProjectsTable />
       </SimpleCard>
       <div className="py-12" />
-      {/* <SimpleCard title={trans['Titles']['projectsNearingCompletion']}>
+      <SimpleCard title={trans['Titles']['projectsNearingCompletion']}>
         <ProjectsNearingCompletion />
-      </SimpleCard> */}
+      </SimpleCard>
     </div>
   );
 };

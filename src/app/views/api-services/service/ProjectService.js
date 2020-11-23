@@ -1,4 +1,5 @@
 import CrowdfundingApi from "../CrowdfundingApi.js";
+import AuthUser from "../AuthService";
 
 export const useProjectService = () => {
 
@@ -15,16 +16,16 @@ export const useProjectService = () => {
         });
     }
 
-    const next_finish = (token) => {
+    const next_finish = () => {
         return new Promise((resolve, reject) => {
-            CrowdfundingApi.get(`/crowdfunding/project/next_finish`, {
+            CrowdfundingApi.get(`crowdfunding/project/next_finish`, {
                 headers: {
-                    'Authorization': token,
+                    'Authorization': AuthUser.getCurrentUser().token,
                     'Accept':'application/json',
                     'Content-Type':'application/json'
                 }
             })
-            .then(({ data: respuesta }) => { resolve(respuesta) })
+            .then((response) => { resolve(response) })
             .catch((error) => { reject(error) });
         });
     }

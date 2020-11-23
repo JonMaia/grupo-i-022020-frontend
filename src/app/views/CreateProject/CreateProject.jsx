@@ -4,9 +4,7 @@ import { ValidatorForm, TextValidator } from "react-material-ui-form-validator";
 import {
   Button,
   Icon,
-  Grid,
-  FormControlLabel,
-  Checkbox
+  Grid
 } from "@material-ui/core";
 import {
   MuiPickersUtilsProvider,
@@ -14,22 +12,26 @@ import {
 } from "@material-ui/pickers";
 import "date-fns";
 import DateFnsUtils from "@date-io/date-fns";
+import history from "history.js";
+import Snackbar from "@material-ui/core/Snackbar";
 import translate from "../../../translate.js";
 import { useLocationService } from "../api-services/service/LocationService";
 import { useAdminService } from "../api-services/service/AdminService";
+import { MySnackbarContentWrapper } from "../material-kit/snackbar/CustomizedSnackbar.jsx";
 import AuthService from "../api-services/AuthService.js";
 
 class CreateProject extends Component {
   state = {
     name: "",
     minPercentage: "",
-    active: true,
     endDate: new Date(),
     location: "",
     factor: "",
     errorMessageEndDate: false,
     locations: [],
     single: null,
+    create: false,
+    msg: ""
   };
 
   handleChangeSingle(value) {
@@ -75,29 +77,29 @@ class CreateProject extends Component {
   }
 
   handleSubmit = event => {
+    event.preventDefault();
     const project = {
-      idAdmin: AuthService.getCurrentUser().id.toString(),
-      active: this.state.active,
-      endDate: this.state.endDate.toLocaleDateString(),
+      idAdmin: AuthService.getCurrentUser().id,
+      endDate: this.state.endDate,
       factor: this.state.factor,
       locationName: this.state.single.value.name,
-      locationProvince: this.state.single.value.province,
-      locationPopulation: this.state.single.value.population,
-      locationState: this.state.single.value.state,
+      idLocation: this.state.single.value.id,
       minPercentage: this.state.minPercentage,
       name: this.state.name
     }
     console.log(project);
     console.log(AuthService.getCurrentUser());
+    this.setState({create: true, msg: translate['Dialog']['create']});
+    setTimeout(100000);
     useAdminService().createProject(project)
     .then((response) => { 
-      console.log(response);
+      history.push({
+        pathname: "/home"
+      
+      });
     }).catch((error) => {
       console.log(error);
     });
-    console.log(this.state);
-    console.log("submitted");
-    console.log(event);
   };
 
   handleChange = event => {
@@ -113,19 +115,39 @@ class CreateProject extends Component {
     }
   };
 
+  handleClose = () => {
+    this.setState({create: false});
+  }
+
   render() {
     let {
       name,
       minPercentage,
-      active,
       endDate,
       factor,
       errorMessageEndDate,
       single,
-      locations
+      locations,
+      create,
+      msg
     } = this.state;
     return (
       <div>
+        <Snackbar
+          anchorOrigin={{
+            vertical: "bottom",
+            horizontal: "left"
+          }}
+          open={create}
+          autoHideDuration={6000}
+          onClose={() => this.handleClose}
+        >
+          <MySnackbarContentWrapper
+            onClose={() => this.handleClose}
+            variant="success"
+            message={msg}
+          />
+        </Snackbar>
         <ValidatorForm
           ref="form"
           onSubmit={this.handleSubmit}
@@ -208,16 +230,9 @@ class CreateProject extends Component {
                 ]}
                 errorMessages={["this field is required", "accepted values between 1 and 100"]}
               />
-              <FormControlLabel
-                control={<Checkbox />}
-                label={translate['Tables']['active']}
-                value={active}
-                defaultChecked={true}
-                name="active"
-              />
             </Grid>
           </Grid>
-          <Button color="primary" variant="contained" type="submit">
+          <Button color="primary" variant="contained" type="submit" onClick={this.handleSubmit}>
             <Icon>send</Icon>
               <span className="pl-8 capitalize">{translate['Titles']['createProject']}</span>
           </Button>

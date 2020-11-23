@@ -24,9 +24,12 @@ import useMediaQuery from "@material-ui/core/useMediaQuery";
 import translate from '../../../translate';
 import { useHistory } from 'react-router-dom';
 import { useTheme } from "@material-ui/core/styles";
+import Snackbar from "@material-ui/core/Snackbar";
+import { MySnackbarContentWrapper } from "../material-kit/snackbar/CustomizedSnackbar.jsx";
 import AuthService from "../api-services/AuthService.js";
 import { useUserService } from "../api-services/service/UserService.js";
 import { useProjectService } from "../api-services/service/ProjectService.js";
+import history from "history.js";
 import { useAdminService } from "../api-services/service/AdminService.js";
 
 const Transition = React.forwardRef(function Transition(props, ref) {
@@ -41,7 +44,7 @@ const InfoProjectTable = () => {
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [page, setPage]               = useState(0);
   const [trans]                       = useState(translate);
-  const history                       = useHistory();
+  const historyData                   = useHistory();
   const theme                         = useTheme();
   const fullScreen                    = useMediaQuery(theme.breakpoints.down("sm"));
   const userAuth                      = AuthService.getCurrentUser();
@@ -50,6 +53,8 @@ const InfoProjectTable = () => {
   const { finishCollection }          = useAdminService();
   const [close, setClose]             = useState(false);
   const [msg, setMsg]                 = useState("");
+  const [create, setCreate]           = useState(false);
+  const [collection, setCollection]   = useState("");
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -60,13 +65,23 @@ const InfoProjectTable = () => {
   };
 
   useEffect(() => {
-    const projectId = history.location.state.id;
+    const projectId = historyData.location.state.id;
     console.log(userAuth.token);
     get_project(projectId, userAuth.token)
       .then((response) => {
         console.log(response);
         setProject(response);
         setLocation(response.location);
+        if (localStorage.getItem("i18n") == "en") {
+          if (response.collection > 0) {
+            var collect = Math.ceil(response.collection / 150).toFixed(2)
+            setCollection(collect.toString().replace('.', ','));
+          } else {
+            setCollection(response.collection.toString());
+          }
+        } else {
+          setCollection(response.collection.toString());
+        }
       })
       .catch((error) => {
         console.log(error);
@@ -78,13 +93,23 @@ const InfoProjectTable = () => {
       "amount": values.amount,
       "comment": values.comment,
       "idDonor": userAuth.id,
-      "idProject": history.location.state.id,
+      "idProject": historyData.location.state.id,
     }
     
     new_donate(donation, userAuth.token)
       .then((response) => {
         setProject(response.data.project);
         setLocation(response.data.project.location);
+        if (localStorage.getItem("i18n") == "en") {
+          if (response.collection > 0) {
+            var collect = Math.ceil(response.collection / 150).toFixed(2)
+            setCollection(collect.toString().replace('.', ','));
+          } else {
+            setCollection(response.collection.toString());
+          }
+        } else {
+          setCollection(response.collection.toString());
+        }
       })
       .catch((error) => console.log(error));
     handleClose();
@@ -98,13 +123,29 @@ const InfoProjectTable = () => {
     close ? setClose(false) : setClose(true);
   }
 
+  const handleCloseCreate = () => {
+    setCreate(false);
+  }
+
   const handleAccept = () => {
     console.log(project);
-    finishCollection(project, userAuth.token)
+    const object = {
+      idAdmin: AuthService.getCurrentUser().id,
+      idProject: project.id,
+    }
+    setClose(false);
+    setMsg(translate['Dialog']['close']);
+    setCreate(true);
+    setTimeout(100000);
+    finishCollection(object, userAuth.token)
       .then((response) => {
-        console.log(response);
+        history.push({
+          pathname: "/home"
+        });
       })
-      .catch((error) => console.log(error));
+      .catch((error) => { history.push({
+        pathname: "/home"
+      }); });
   }
 
   const handleChange = (prop) => (event) => {
@@ -117,6 +158,21 @@ const InfoProjectTable = () => {
 
   return (
     <div className="w-100 overflow-auto">
+      <Snackbar
+          anchorOrigin={{
+            vertical: "bottom",
+            horizontal: "left"
+          }}
+          open={create}
+          autoHideDuration={6000}
+          onClose={handleCloseCreate}
+        >
+          <MySnackbarContentWrapper
+            onClose={handleCloseCreate}
+            variant="success"
+            message={msg}
+          />
+        </Snackbar>
       <Dialog
         open={close}
         TransitionComponent={Transition}
@@ -179,12 +235,12 @@ const InfoProjectTable = () => {
                   </small>)}
               </TableCell>
               <TableCell className="px-0 capitalize" colSpan={2} align="center">
-                    {trans['coin']}{project.collection}
+                    {trans['coin']}{collection}
               </TableCell>
               <TableCell className="px-0 capitalize" colSpan={2} align="center">
-                {project.percentage === 100 ? (
+                {project.percentage >= 100 ? (
                   <small className="border-radius-4 bg-green text-white px-8 py-2 ">
-                    {Math.ceil(project.percentage).toFixed(2)}%
+                    {project.percentage > 100 ? 100 : Math.ceil(project.percentage).toFixed(2)}%
                   </small>
                 ) : (
                   project.percentage < 20 ? (
@@ -200,17 +256,19 @@ const InfoProjectTable = () => {
             </TableCell>
             {userAuth.id == 1 ?
               <TableCell className="px-0" colSpan={1} align="center">
-                <IconButton onClick={() => closeProject()}>
-                  {project.percentage === 100 ? (
-                      <Icon className="icon-table-green">check_circle</Icon>
+                {project.percentage >= 100 ? (
+                      <IconButton onClick={() => closeProject()}>
+                        <Icon className="icon-table-green">check_circle</Icon>
+                      </IconButton>
                     ) : (
-                      project.percentage < 20 ? (
+                      <IconButton disabled={true} onClick={() => closeProject()}>
+                      {project.percentage < 20 ? (
                           <Icon color="error">check_circle</Icon>
                         ) : (
                           <Icon color="secondary">check_circle</Icon>
-                        )
+                        )}
+                      </IconButton>
                   )}
-                </IconButton>
               </TableCell> : 
               <TableCell className="px-0" colSpan={1} align="center">
                 <Button hidden onClick={handleClose}>
@@ -257,49 +315,6 @@ const InfoProjectTable = () => {
           </TableRow>
         </TableBody>
       </Table>
-      {/* <div className="py-12" />
-      <Table style={{ whiteSpace: "pre" }}>
-        <TableHead>
-          <TableRow>
-            <TableCell className="px-0">{trans['Tables']['nickname']}</TableCell>
-            <TableCell className="px-0">{trans['Tables']['donation']}</TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {donors
-            .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-            .map((donor, index) => (
-              <TableRow key={index}>
-                <TableCell className="px-0 capitalize" align="left">
-                  {donor.nickname}
-                </TableCell>
-                <TableCell className="px-0 capitalize" align="left">
-                  {trans['coins']}{donor.donation}
-                </TableCell>
-              </TableRow>
-            ))}
-        </TableBody>
-      </Table>
-
-      <TablePagination
-        className="px-16"
-        rowsPerPageOptions={[5, 10, 25]}
-        component="div"
-        count={donors.length}
-        rowsPerPage={rowsPerPage}
-        page={page}
-        backIconButtonProps={{
-          "aria-label": trans['Tables']['previousPage']
-        }}
-        nextIconButtonProps={{
-          "aria-label": trans['Tables']['nextPage']
-        }}
-        backIconButtonText={trans['Tables']['previousPage']}
-        nextIconButtonText={trans['Tables']['nextPage']}
-        onChangePage={handleChangePage}
-        labelRowsPerPage={trans['Tables']['rowsPerPage']}
-        onChangeRowsPerPage={handleChangeRowsPerPage}
-      /> */}
     </div> 
   );
 };

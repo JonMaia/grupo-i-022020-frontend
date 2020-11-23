@@ -40,7 +40,7 @@ class SignUp extends Component {
     });
   };
   render() {
-    let { name, mail, password, nickname, error, msg } = this.state;
+    let { name, mail, password, nickname } = this.state;
     return (
       <div className="signup flex flex-center w-100 h-100vh">
         <div className="p-8">

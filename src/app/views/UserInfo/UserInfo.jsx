@@ -60,13 +60,17 @@ const UserInfo = () => {
                     {donation.projectName}
                   </TableCell>
                   <TableCell className="px-0 capitalize" colSpan={2} align="center">
-                    {donation.amount}
+                    {trans['coin']}{localStorage.getItem("i18n") == "en" && donation.amount > 0 ? 
+                    Math.ceil(donation.amount / 150).toFixed(2).toString().replace('.', ',') :
+                    donation.amount.toString()}
                   </TableCell>
                   <TableCell className="px-0 capitalize" colSpan={2} align="center">
                     {donation.points}
                   </TableCell>
                   <TableCell className="px-0 capitalize" colSpan={2} align="center">
-                    {donation.date}
+                    {localStorage.getItem("i18n") == "en" ? 
+                    donation.date :
+                    new Date(donation.date).toLocaleDateString('es-Ar')}
                   </TableCell>
                 </TableRow>
               ))}
