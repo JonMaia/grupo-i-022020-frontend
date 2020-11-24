@@ -38,7 +38,7 @@ class AuthService {
 
   register(user) {
     return new Promise((resolve, reject) => {
-      CrowdfundingApi.post('crowdfunding/user/create/', user, {
+      CrowdfundingApi.post('crowdfunding/user/create', user, {
         headers: {
           'Accept':'application/json',
           'Content-Type':'application/json'}
