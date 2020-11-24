@@ -11,7 +11,8 @@ const en = {
     "username"       : "Username",
     "nickname"       : "Nickname",
     "logout"         : "Logout",
-    "isAdmin"        : "Login as administrator"
+    "isAdmin"        : "Login as administrator",
+    "google"         : "Login with Google"
   },
   "Validations": {
     "email"      : "Email is not valid",
@@ -86,7 +87,8 @@ const es = {
     "username"       : "Nombre de Usuario",
     "nickname"       : "Apodo",
     "logout"         : "Cerrar Sesión",
-    "isAdmin"        : "Iniciar como administrado"
+    "isAdmin"        : "Iniciar como administrado",
+    "google"         : "Iniciar sesión con Google"
   },
   "Validations": {
     "email"      : "El correo no es válido",

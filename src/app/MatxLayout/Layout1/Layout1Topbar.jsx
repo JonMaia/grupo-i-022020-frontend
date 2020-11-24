@@ -56,6 +56,12 @@ class Layout1Topbar extends Component {
     this.updateSidebarMode({ mode });
   };
 
+  userInfo = () => {
+    this.props.history.push({
+      pathname: '/user/info'
+    });
+  };
+
   handleSignOut = () => {
     this.props.logoutUser();
   };
@@ -113,11 +119,9 @@ class Layout1Topbar extends Component {
                       <span className="pl-16"> {translate['Titles']['home']} </span>
                     </Link>
                   </MenuItem>
-                  <MenuItem style={{ minWidth: 185 }}>
-                    <Link
-                      className="flex flex-middle"
-                      to="/user/info"
-                    >
+                  <MenuItem style={{ minWidth: 185 }}
+                            onClick={this.userInfo}>
+                    <Link className="flex flex-middle" to="/user/info">
                       <Icon> person </Icon>
                       <span className="pl-16"> {translate['Titles']['profile']} </span>
                     </Link>

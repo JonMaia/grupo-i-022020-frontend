@@ -57,7 +57,7 @@ class SignIn extends Component {
         });
       })
       .catch((error) => {
-        this.setState({error: true, msg: error.response.data});
+        this.setState({error: true, msg: error.data});
       });
     } else {
       AuthService.login(this.state)
@@ -67,7 +67,7 @@ class SignIn extends Component {
         });
       })
       .catch((error) => {
-        this.setState({error: true, msg: error.response.data});
+        this.setState({error: true, msg: error.data});
       });
     }
   };

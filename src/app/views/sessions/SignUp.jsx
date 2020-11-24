@@ -9,6 +9,7 @@ import translate from "../../../translate";
 import { connect } from "react-redux";
 import  AuthService   from "../api-services/AuthService.js";
 import history from "history.js";
+import GoogleLogin from 'react-google-login';
 
 class SignUp extends Component {
   state = {
@@ -27,20 +28,58 @@ class SignUp extends Component {
     });
   };
 
+  signUp(res) {
+    if (res.profileObj !== undefined) {
+      let googleResponse = {
+        name: res.profileObj.name,
+        email: res.profileObj.email,
+        token: res.googleId,
+        image: res.profileObj.imageUrl,
+        providerId: 'Google'
+      };
+    }
+    console.log("iniciar sesion con google....");
+  }
+
   handleFormSubmit = event => {
-    AuthService.register(this.state)
+    var user = {
+      "name": this.state.name,
+      "mail": this.state.mail,
+      "nickname": this.state.nickname,
+      "password": this.state.password 
+    }
+
+    AuthService.register(user)
     .then(() => {
       history.push({
         pathname: "/session/signin"
       
       });
     }).catch((error) => {
-      console.log(error.response.data);
-      this.setState({error: true, msg: error.response.data});
+      console.log(error.data);
+      this.setState({error: true, msg: error.data});
     });
   };
   render() {
     let { name, mail, password, nickname } = this.state;
+    let responseGoogle = (response) => {
+      var user = {
+        "mail": response.profileObj.email,
+        "nickname": response.profileObj.givenName,
+        "name": response.profileObj.givenName,
+        "password": response.profileObj.name.slice(0, 5)
+      }
+      AuthService.register(user, response.tokenId)
+      .then((response) => {
+        history.push({
+          pathname: "/session/signin"
+        });
+      }).catch((error) => {
+        console.log(error.data);
+      });
+      console.log(response);
+      this.signUp(response);
+    };
     return (
       <div className="signup flex flex-center w-100 h-100vh">
         <div className="p-8">
@@ -124,6 +163,13 @@ class SignUp extends Component {
                       </Button>
                     </div>
                   </ValidatorForm>
+                  <div style={{margin: '10%', cursor: 'pointer'}}>
+                    <GoogleLogin 
+                      clientId="107447816836-mqhfrr3a9aq4nldsr4tjk0624v833fei.apps.googleusercontent.com"
+                      buttonText={translate['SignIn/Up']['google']}
+                      onSuccess={responseGoogle}
+                      onFailure={responseGoogle} ></GoogleLogin>
+                  </div>
                 </div>
               </Grid>
             </Grid>
